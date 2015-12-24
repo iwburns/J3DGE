@@ -11,6 +11,13 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Engine {
+
+    public Game game;
+
+    public Engine(Game g) {
+        game = g;
+    }
+
     // We need to strongly reference callback instances.
     private GLFWErrorCallback errorCallback;
     private GLFWKeyCallback keyCallback;
@@ -49,11 +56,8 @@ public class Engine {
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
 
-        int WIDTH = 300;
-        int HEIGHT = 300;
-
         // Create the window
-        window = glfwCreateWindow(WIDTH, HEIGHT, "Hello World!", NULL, NULL);
+        window = glfwCreateWindow(game.width, game.height, "n-body-java", NULL, NULL);
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
@@ -71,8 +75,8 @@ public class Engine {
         // Center our window
         glfwSetWindowPos(
                 window,
-                (vidmode.width() - WIDTH) / 2,
-                (vidmode.height() - HEIGHT) / 2
+                (vidmode.width() - game.width) / 2,
+                (vidmode.height() - game.height) / 2
         );
 
         // Make the OpenGL context current
@@ -99,6 +103,8 @@ public class Engine {
         // the window or has pressed the ESCAPE key.
         while ( glfwWindowShouldClose(window) == GLFW_FALSE ) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+
+            //drawing goes here.
 
             glfwSwapBuffers(window); // swap the color buffers
 
