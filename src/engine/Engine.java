@@ -22,6 +22,8 @@ public class Engine {
     // The window handle
     private long window;
 
+    private Timer timer;
+
     public Game game;
 
     public Engine(Game g) {
@@ -37,6 +39,7 @@ public class Engine {
         };
 
         game = g;
+        timer = new Timer();
     }
 
     public void run() {
