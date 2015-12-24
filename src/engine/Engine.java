@@ -1,10 +1,13 @@
 package engine;
 
+import org.lwjgl.BufferUtils;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
+
+import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -12,18 +15,29 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Engine {
 
-    public Game game;
-
-    public Engine(Game g) {
-        game = g;
-    }
-
     // We need to strongly reference callback instances.
     private GLFWErrorCallback errorCallback;
     private GLFWKeyCallback keyCallback;
 
     // The window handle
     private long window;
+
+    public Game game;
+
+    public Engine(Game g) {
+        errorCallback = GLFWErrorCallback.createPrint(System.err);
+
+        //TODO: move to a key controls class or similar
+        keyCallback = new GLFWKeyCallback() {
+            @Override
+            public void invoke(long window, int key, int scancode, int action, int mods) {
+                if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
+                    glfwSetWindowShouldClose(window, GLFW_TRUE); // We will detect this in our rendering loop
+            }
+        };
+
+        game = g;
+    }
 
     public void run() {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
@@ -43,9 +57,7 @@ public class Engine {
     }
 
     private void init() {
-        // Setup an error callback. The default implementation
-        // will print the error message in System.err.
-        glfwSetErrorCallback(errorCallback = GLFWErrorCallback.createPrint(System.err));
+        glfwSetErrorCallback(errorCallback);
 
         // Initialize GLFW. Most GLFW functions will not work before doing this.
         if ( glfwInit() != GLFW_TRUE )
@@ -62,13 +74,7 @@ public class Engine {
             throw new RuntimeException("Failed to create the GLFW window");
 
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
-        glfwSetKeyCallback(window, keyCallback = new GLFWKeyCallback() {
-            @Override
-            public void invoke(long window, int key, int scancode, int action, int mods) {
-                if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
-                    glfwSetWindowShouldClose(window, GLFW_TRUE); // We will detect this in our rendering loop
-            }
-        });
+        glfwSetKeyCallback(window, keyCallback);
 
         // Get the resolution of the primary monitor
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
@@ -99,18 +105,53 @@ public class Engine {
         // Set the clear color
         glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
 
-        // Run the rendering loop until the user has attempted to close
-        // the window or has pressed the ESCAPE key.
-        while ( glfwWindowShouldClose(window) == GLFW_FALSE ) {
-            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+        /* Declare buffers for using inside the loop */
+        IntBuffer width = BufferUtils.createIntBuffer(1);
+        IntBuffer height = BufferUtils.createIntBuffer(1);
 
-            //drawing goes here.
+        /* Loop until window gets closed */
+        while (glfwWindowShouldClose(window) != GLFW_TRUE) {
+            float ratio;
 
-            glfwSwapBuffers(window); // swap the color buffers
+            /* Get width and height to calcualte the ratio */
+            glfwGetFramebufferSize(window, width, height);
+            ratio = width.get() / (float) height.get();
 
-            // Poll for window events. The key callback above will only be
-            // invoked during this call.
+            /* Rewind buffers for next get */
+            width.rewind();
+            height.rewind();
+
+            /* Set viewport and clear screen */
+            glViewport(0, 0, width.get(), height.get());
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            /* Set ortographic projection */
+            glMatrixMode(GL_PROJECTION);
+            glLoadIdentity();
+            glOrtho(-ratio, ratio, -1f, 1f, 1f, -1f);
+            glMatrixMode(GL_MODELVIEW);
+
+            /* Rotate matrix */
+            glLoadIdentity();
+            glRotatef((float) glfwGetTime() * 50f, 0f, 0f, 1f);
+
+            /* Render triangle */
+            glBegin(GL_TRIANGLES);
+            glColor3f(1f, 0f, 0f);
+            glVertex3f(-0.6f, -0.4f, 0f);
+            glColor3f(0f, 1f, 0f);
+            glVertex3f(0.6f, -0.4f, 0f);
+            glColor3f(0f, 0f, 1f);
+            glVertex3f(0f, 0.6f, 0f);
+            glEnd();
+
+            /* Swap buffers and poll Events */
+            glfwSwapBuffers(window);
             glfwPollEvents();
+
+            /* Flip buffers for next loop */
+            width.flip();
+            height.flip();
         }
     }
 }
