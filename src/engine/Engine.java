@@ -107,7 +107,7 @@ public class Engine {
         //all initialization and gl code needs to be after the above call.
 
         // Set the clear color
-        glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+        glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
 
         /* Declare buffers for using inside the loop */
         IntBuffer width = BufferUtils.createIntBuffer(1);
