@@ -1,5 +1,8 @@
 package engine;
 
+import engine.object3d.Object3d;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -112,6 +115,14 @@ public class Engine {
         /* Declare buffers for using inside the loop */
         IntBuffer width = BufferUtils.createIntBuffer(1);
         IntBuffer height = BufferUtils.createIntBuffer(1);
+
+        Object3d obj = new Object3d();
+
+        obj.translate(new Vector3f(1, 2, 3));
+        obj.rotate(new Vector3f(1, 0 ,0), (float)Math.toRadians(90));
+
+        System.out.println(obj.getLocalToWorld());
+        System.out.println(obj.getLocalToWorld().invert(new Matrix4f()));
 
         /* Loop until window gets closed */
         while (glfwWindowShouldClose(window) != GLFW_TRUE) {
