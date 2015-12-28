@@ -5,8 +5,8 @@ public class Game {
     public final int TARGET_FPS = 60;
     public final int TARGET_UPS = 30;
 
-    public int width = 1280;
-    public int height = 720;
+    public int width = 800;
+    public int height = 600;
 
     public Game() {
 

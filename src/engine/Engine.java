@@ -116,14 +116,6 @@ public class Engine {
         IntBuffer width = BufferUtils.createIntBuffer(1);
         IntBuffer height = BufferUtils.createIntBuffer(1);
 
-        Object3d obj = new Object3d();
-
-        obj.translate(new Vector3f(1, 2, 3));
-        obj.rotate(new Vector3f(1, 0 ,0), (float)Math.toRadians(90));
-
-        System.out.println(obj.getLocalToWorld());
-        System.out.println(obj.getLocalToWorld().invert(new Matrix4f()));
-
         /* Loop until window gets closed */
         while (glfwWindowShouldClose(window) != GLFW_TRUE) {
             float ratio;

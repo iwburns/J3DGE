@@ -67,6 +67,28 @@ public class Object3d {
         return localToWorld;
     }
 
+    public Matrix4f getWorldToLocal() {
+        worldToLocal = new Matrix4f();
+
+        Vector3f negPosition = new Vector3f();
+        position.negate(negPosition);
+
+        Quaternionf negRotation = new Quaternionf();
+        rotation.invert(negRotation);
+
+        Vector3f invScale = new Vector3f(
+                1.0f / scale.x,
+                1.0f / scale.y,
+                1.0f / scale.z
+        );
+
+        worldToLocal.scale(invScale);
+        worldToLocal.rotate(negRotation);
+        worldToLocal.translate(negPosition);
+
+        return worldToLocal;
+    }
+
     public Vector3f getPosition() {
         return position;
     }
@@ -77,9 +99,5 @@ public class Object3d {
 
     public Vector3f getScale() {
         return scale;
-    }
-
-    public Matrix4f getWorldToLocal() {
-        return worldToLocal;
     }
 }
