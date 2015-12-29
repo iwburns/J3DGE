@@ -1,6 +1,12 @@
 package engine;
 
+import engine.geometry.Geometry;
+import engine.material.Material;
+import engine.object3d.Mesh;
 import engine.object3d.Object3d;
+import engine.object3d.camera.PerspectiveCamera;
+import engine.shader.ShaderProgram;
+import engine.util.Draw3dUtils;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
@@ -10,10 +16,15 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
+import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
+import static org.lwjgl.opengl.GL15.glBindBuffer;
+import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
+import static org.lwjgl.opengl.GL20.glUseProgram;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Engine {
@@ -28,6 +39,12 @@ public class Engine {
     private Timer timer;
 
     public Game game;
+
+    Mesh box;
+    FloatBuffer projectionBuffer;
+    FloatBuffer viewBuffer;
+    FloatBuffer modelBuffer;
+    PerspectiveCamera camera;
 
     public Engine(Game g) {
         errorCallback = GLFWErrorCallback.createPrint(System.err);
@@ -100,6 +117,40 @@ public class Engine {
         glfwShowWindow(window);
     }
 
+    private void update() {
+        box.rotate(new Vector3f(0, 0, 1), 1f);
+    }
+
+    private void render() {
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        ShaderProgram program = box.getMaterial().getProgram();
+
+        glUseProgram(program.getProgramId());
+
+        camera.getProjection().get(projectionBuffer);
+        camera.getView().get(viewBuffer);
+        box.getModel().get(modelBuffer);
+
+        glUniformMatrix4fv(program.getUniformLocation("projection"), false, projectionBuffer);
+        glUniformMatrix4fv(program.getUniformLocation("view"), false, viewBuffer);
+        glUniformMatrix4fv(program.getUniformLocation("model"), false, modelBuffer);
+
+        box.bindVao();
+        box.enableVertexAttributes();
+
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, box.getIndicesVboID());
+        glDrawElements(box.getGeometry().getDrawMode(), box.getIndicesCount(), GL_UNSIGNED_SHORT, 0);
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+        box.disableVertexAttributes();
+        box.unbindVao();
+
+        glUseProgram(0);
+
+        glfwSwapBuffers(window);
+    }
+
     private void loop() {
         // This line is critical for LWJGL's interoperation with GLFW's
         // OpenGL context, or any context that is managed externally.
@@ -108,6 +159,18 @@ public class Engine {
         // bindings available for use.
         GL.createCapabilities();
         //all initialization and gl code needs to be after the above call.
+
+        camera = new PerspectiveCamera(75,  (float)(game.width)/(game.height), 0.00001f, 100);
+        camera.moveForward(-5);
+
+        Geometry boxGeometry = Draw3dUtils.cubeGeometry(1, 1, 1, 1, 1, 1);
+        Material boxMaterial = new Material();
+        box = new Mesh(boxGeometry, boxMaterial);
+        box.translate(new Vector3f(0, 0, 0));
+
+        projectionBuffer = BufferUtils.createFloatBuffer(16);
+        viewBuffer = BufferUtils.createFloatBuffer(16);
+        modelBuffer = BufferUtils.createFloatBuffer(16);
 
         // Set the clear color
         glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
@@ -130,30 +193,10 @@ public class Engine {
 
             /* Set viewport and clear screen */
             glViewport(0, 0, width.get(), height.get());
-            glClear(GL_COLOR_BUFFER_BIT);
 
-            /* Set ortographic projection */
-            glMatrixMode(GL_PROJECTION);
-            glLoadIdentity();
-            glOrtho(-ratio, ratio, -1f, 1f, 1f, -1f);
-            glMatrixMode(GL_MODELVIEW);
+            update();
+            render();
 
-            /* Rotate matrix */
-            glLoadIdentity();
-            glRotatef((float) glfwGetTime() * 50f, 0f, 0f, 1f);
-
-            /* Render triangle */
-            glBegin(GL_TRIANGLES);
-            glColor3f(1f, 0f, 0f);
-            glVertex3f(-0.6f, -0.4f, 0f);
-            glColor3f(0f, 1f, 0f);
-            glVertex3f(0.6f, -0.4f, 0f);
-            glColor3f(0f, 0f, 1f);
-            glVertex3f(0f, 0.6f, 0f);
-            glEnd();
-
-            /* Swap buffers and poll Events */
-            glfwSwapBuffers(window);
             glfwPollEvents();
 
             /* Flip buffers for next loop */

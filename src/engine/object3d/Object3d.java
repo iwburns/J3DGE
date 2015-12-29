@@ -32,10 +32,8 @@ public class Object3d {
         position.add(v);
     }
 
-    public void rotate(Vector3f axis, float angle) {
-        Quaternionf rot = new Quaternionf(new AxisAngle4f(angle, axis));
-        rot.normalize();
-        rot.mul(rotation, rotation);
+    public void rotate(Vector3f axis, float degrees) {
+        rotation.rotateAxis((float)Math.toRadians(degrees), axis);
     }
 
     public void scale(Vector3f v) {
