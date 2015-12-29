@@ -70,6 +70,10 @@ public class Renderer {
             mesh.disableVertexAttributes();
             mesh.unbindVao();
         }
+
+        for (Object3d child: obj.getChildren()) {
+            drawObject(child);
+        }
     }
 
     public void destroy() {

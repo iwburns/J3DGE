@@ -5,6 +5,8 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Quaternionf;
 
+import java.util.ArrayList;
+
 public class Object3d {
 
     //TODO: write a destroy
@@ -18,8 +20,8 @@ public class Object3d {
     protected Matrix4f localToWorld;
     protected Matrix4f worldToLocal;
 
-    //TODO: parent
-    //TODO: children
+    Object3d parent;
+    ArrayList<Object3d> children;
 
     public Object3d() {
         position = new Vector3f();
@@ -28,6 +30,17 @@ public class Object3d {
 
         localToWorld = new Matrix4f();
         worldToLocal = new Matrix4f();
+
+        parent = null;
+        children = new ArrayList<>();
+    }
+
+    public void addChild(Object3d obj) {
+        if (this == obj) {
+            throw new IllegalArgumentException("Cannot add object as a child to itself.");
+        }
+        children.add(obj);
+        obj.parent = this;
     }
 
     public void translate(Vector3f v) {
@@ -58,7 +71,11 @@ public class Object3d {
             transformations to an identity matrix in reverse order to get the desired effect.
          */
 
-        localToWorld = new Matrix4f();
+        if (parent != null) {
+            localToWorld = parent.getLocalToWorld();
+        } else {
+            localToWorld = new Matrix4f();
+        }
 
         localToWorld.translate(position);
         localToWorld.rotate(rotation);
@@ -70,21 +87,7 @@ public class Object3d {
     public Matrix4f getWorldToLocal() {
         worldToLocal = new Matrix4f();
 
-        Vector3f negPosition = new Vector3f();
-        position.negate(negPosition);
-
-        Quaternionf negRotation = new Quaternionf();
-        rotation.invert(negRotation);
-
-        Vector3f invScale = new Vector3f(
-                1.0f / scale.x,
-                1.0f / scale.y,
-                1.0f / scale.z
-        );
-
-        worldToLocal.scale(invScale);
-        worldToLocal.rotate(negRotation);
-        worldToLocal.translate(negPosition);
+        getLocalToWorld().invert(worldToLocal);
 
         return worldToLocal;
     }
@@ -99,5 +102,9 @@ public class Object3d {
 
     public Vector3f getScale() {
         return scale;
+    }
+
+    public ArrayList<Object3d> getChildren() {
+        return children;
     }
 }
