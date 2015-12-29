@@ -3,6 +3,7 @@ package engine;
 import engine.geometry.Geometry;
 import engine.material.Material;
 import engine.object3d.Mesh;
+import engine.object3d.Object3d;
 import engine.object3d.camera.Camera;
 import engine.object3d.camera.PerspectiveCamera;
 import engine.render.Scene;
@@ -20,7 +21,10 @@ public class Game {
     private Scene scene;
     private PerspectiveCamera camera;
 
-    Mesh box;
+    Object3d object1;
+    Mesh mesh1;
+    Mesh mesh2;
+    Mesh mesh3;
 
     public Game() {
         scene = new Scene();
@@ -33,16 +37,40 @@ public class Game {
     }
 
     public void init() {
-        Geometry boxGeometry = Draw3dUtils.cubeGeometry(1, 1, 1, 1, 1, 1);
-        Material boxMaterial = new Material();
-        box = new Mesh(boxGeometry, boxMaterial);
-        box.translate(new Vector3f(0, 0, -5));
+        camera.translate(new Vector3f(0, 0, 5));
 
-        scene.add(box);
+        Material material = new Material();
+        Geometry mesh1Geo = Draw3dUtils.cubeGeometry(1, 1, 1, 1, 0, 0);
+        Geometry mesh2Geo = Draw3dUtils.cubeGeometry(0.5f, 2, 0.5f, 0, 0, 1);
+        Geometry mesh3Geo = Draw3dUtils.sphereGeometry(0.1f, 10, 10, 0, 1, 0);
+        Geometry gridGeo = Draw3dUtils.gridHelper(10, 1);
+        Geometry axisGeo = Draw3dUtils.axisHelper(1);
+
+        Mesh gridMesh = new Mesh(gridGeo, material);
+        Mesh axisMesh = new Mesh(axisGeo, material);
+        scene.add(gridMesh);
+        scene.add(axisMesh);
+
+        mesh1 = new Mesh(mesh1Geo, material);
+        mesh2 = new Mesh(mesh2Geo, material);
+        mesh3 = new Mesh(mesh3Geo, material);
+
+        mesh1.translate(new Vector3f(0, 1, 0));
+        mesh2.translate(new Vector3f(2, 0, 0));
+        mesh3.translate(new Vector3f(1, 0, 0));
+
+        object1 = new Object3d();
+
+        scene.add(object1);
+        object1.addChild(mesh1);
+        mesh1.addChild(mesh2);
+        mesh2.addChild(mesh3);
     }
 
     public void update() {
-        box.rotate(new Vector3f(0, 0, 1), 1);
+        object1.rotate(new Vector3f(1, 0, 0), 1f);
+        mesh1.rotate(new Vector3f(0, 0, 1), 1f);
+        mesh2.rotate(new Vector3f(0, 1, 0), 1f);
     }
 
     public Scene getScene() {

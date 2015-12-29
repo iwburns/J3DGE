@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL32.GL_PROGRAM_POINT_SIZE;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Engine {
@@ -114,10 +115,16 @@ public class Engine {
         GL.createCapabilities();
         //all initialization and gl code needs to be after the above call.
 
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_PROGRAM_POINT_SIZE);
+
         game.init();
 
         // Set the clear color
-        glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
         /* Loop until window gets closed */
         while (!window.shouldClose()) {
