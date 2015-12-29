@@ -1,16 +1,6 @@
 package engine;
 
-import engine.geometry.Geometry;
-import engine.material.Material;
-import engine.object3d.Mesh;
-import engine.object3d.Object3d;
-import engine.object3d.camera.PerspectiveCamera;
 import engine.render.Renderer;
-import engine.render.Scene;
-import engine.shader.ShaderProgram;
-import engine.util.Draw3dUtils;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
@@ -18,7 +8,6 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
-import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -36,15 +25,8 @@ public class Engine {
 
     private Timer timer = new Timer();
     private Renderer renderer = new Renderer();
-    private Scene scene = new Scene();
 
     public Game game;
-    Mesh box;
-    FloatBuffer projectionBuffer;
-    FloatBuffer viewBuffer;
-    FloatBuffer modelBuffer;
-
-    PerspectiveCamera camera;
 
     public Engine(Game g) {
         errorCallback = GLFWErrorCallback.createPrint(System.err);
@@ -117,11 +99,11 @@ public class Engine {
     }
 
     private void update() {
-        box.rotate(new Vector3f(0, 0, 1), 1f);
+        game.update();
     }
 
     private void render() {
-        renderer.render(scene, camera);
+        renderer.render(game.getScene(), game.getCamera());
         glfwSwapBuffers(window);
     }
 
@@ -134,15 +116,7 @@ public class Engine {
         GL.createCapabilities();
         //all initialization and gl code needs to be after the above call.
 
-        camera = new PerspectiveCamera(75,  (float)(game.width)/(game.height), 0.00001f, 100);
-        camera.moveForward(-5);
-
-        Geometry boxGeometry = Draw3dUtils.cubeGeometry(1, 1, 1, 1, 1, 1);
-        Material boxMaterial = new Material();
-        box = new Mesh(boxGeometry, boxMaterial);
-        box.translate(new Vector3f(0, 0, 0));
-
-        scene.add(box);
+        game.init();
 
         // Set the clear color
         glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
@@ -157,7 +131,7 @@ public class Engine {
 
             /* Get width and height to calcualte the ratio */
             glfwGetFramebufferSize(window, width, height);
-            ratio = width.get() / (float) height.get();
+            ratio = width.get() / (float) height.get();  //TODO: update game's camera's aspect ratio
 
             /* Rewind buffers for next get */
             width.rewind();
