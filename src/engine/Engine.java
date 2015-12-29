@@ -5,6 +5,8 @@ import engine.material.Material;
 import engine.object3d.Mesh;
 import engine.object3d.Object3d;
 import engine.object3d.camera.PerspectiveCamera;
+import engine.render.Renderer;
+import engine.render.Scene;
 import engine.shader.ShaderProgram;
 import engine.util.Draw3dUtils;
 import org.joml.Matrix4f;
@@ -21,10 +23,6 @@ import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
-import static org.lwjgl.opengl.GL15.glBindBuffer;
-import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
-import static org.lwjgl.opengl.GL20.glUseProgram;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Engine {
@@ -36,14 +34,16 @@ public class Engine {
     // The window handle
     private long window;
 
-    private Timer timer;
+    private Timer timer = new Timer();
+    private Renderer renderer = new Renderer();
+    private Scene scene = new Scene();
 
     public Game game;
-
     Mesh box;
     FloatBuffer projectionBuffer;
     FloatBuffer viewBuffer;
     FloatBuffer modelBuffer;
+
     PerspectiveCamera camera;
 
     public Engine(Game g) {
@@ -59,7 +59,6 @@ public class Engine {
         };
 
         game = g;
-        timer = new Timer();
     }
 
     public void run() {
@@ -122,32 +121,7 @@ public class Engine {
     }
 
     private void render() {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-        ShaderProgram program = box.getMaterial().getProgram();
-
-        glUseProgram(program.getProgramId());
-
-        camera.getProjection().get(projectionBuffer);
-        camera.getView().get(viewBuffer);
-        box.getModel().get(modelBuffer);
-
-        glUniformMatrix4fv(program.getUniformLocation("projection"), false, projectionBuffer);
-        glUniformMatrix4fv(program.getUniformLocation("view"), false, viewBuffer);
-        glUniformMatrix4fv(program.getUniformLocation("model"), false, modelBuffer);
-
-        box.bindVao();
-        box.enableVertexAttributes();
-
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, box.getIndicesVboID());
-        glDrawElements(box.getGeometry().getDrawMode(), box.getIndicesCount(), GL_UNSIGNED_SHORT, 0);
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-        box.disableVertexAttributes();
-        box.unbindVao();
-
-        glUseProgram(0);
-
+        renderer.render(scene, camera);
         glfwSwapBuffers(window);
     }
 
@@ -168,9 +142,7 @@ public class Engine {
         box = new Mesh(boxGeometry, boxMaterial);
         box.translate(new Vector3f(0, 0, 0));
 
-        projectionBuffer = BufferUtils.createFloatBuffer(16);
-        viewBuffer = BufferUtils.createFloatBuffer(16);
-        modelBuffer = BufferUtils.createFloatBuffer(16);
+        scene.add(box);
 
         // Set the clear color
         glClearColor(0.5f, 0.5f, 0.5f, 0.0f);

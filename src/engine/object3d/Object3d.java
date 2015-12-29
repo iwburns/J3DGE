@@ -7,6 +7,8 @@ import org.joml.Quaternionf;
 
 public class Object3d {
 
+    //TODO: write a destroy
+
     //TODO: matrix caching booleans
 
     protected Vector3f position;

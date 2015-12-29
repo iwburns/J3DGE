@@ -21,6 +21,8 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 public class Mesh extends Object3d {
 
+    //TODO: check destroy.
+
     Geometry geometry;
     Material material;
 
