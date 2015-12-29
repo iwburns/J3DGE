@@ -1,8 +1,14 @@
 package engine.geometry;
 
+import static org.lwjgl.opengl.GL11.GL_LINES;
+import static org.lwjgl.opengl.GL11.GL_POINTS;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 
 public class Geometry {
+
+    public static final int DRAW_MODE_TRIANGLES = GL_TRIANGLES;
+    public static final int DRAW_MODE_POINTS = GL_POINTS;
+    public static final int DRAW_MODE_LINES = GL_LINES;
 
     protected boolean indexed = false;
     protected float[] vertices;
@@ -25,6 +31,10 @@ public class Geometry {
 
     public int getDrawMode() {
         return drawMode;
+    }
+
+    public void setDrawMode(int dm) {
+        drawMode = dm;
     }
 
     public float[] getVertices() {
