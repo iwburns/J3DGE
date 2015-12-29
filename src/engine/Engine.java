@@ -1,14 +1,12 @@
 package engine;
 
 import engine.render.Renderer;
-import org.lwjgl.BufferUtils;
+import engine.window.Window;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
-
-import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -21,7 +19,8 @@ public class Engine {
     private GLFWKeyCallback keyCallback;
 
     // The window handle
-    private long window;
+    private Window window;
+
 
     private Timer timer = new Timer();
     private Renderer renderer = new Renderer();
@@ -51,7 +50,7 @@ public class Engine {
             loop();
 
             // Release window and window callbacks
-            glfwDestroyWindow(window);
+            window.destroy();
             keyCallback.release();
         } finally {
             // Terminate GLFW and release the GLFWErrorCallback
@@ -73,29 +72,28 @@ public class Engine {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
 
         // Create the window
-        window = glfwCreateWindow(game.width, game.height, "n-body-java", NULL, NULL);
-        if ( window == NULL )
+        window = new Window(game.width, game.height, "n-body-java", NULL, NULL);
+        if ( window.getWindowHandle() == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
-        glfwSetKeyCallback(window, keyCallback);
+        glfwSetKeyCallback(window.getWindowHandle(), keyCallback);
 
         // Get the resolution of the primary monitor
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
         // Center our window
-        glfwSetWindowPos(
-                window,
+        window.setPosition(
                 (vidmode.width() - game.width) / 2,
                 (vidmode.height() - game.height) / 2
         );
 
         // Make the OpenGL context current
-        glfwMakeContextCurrent(window);
+        glfwMakeContextCurrent(window.getWindowHandle());
         // Enable v-sync
         glfwSwapInterval(1);
 
         // Make the window visible
-        glfwShowWindow(window);
+        glfwShowWindow(window.getWindowHandle());
     }
 
     private void update() {
@@ -104,7 +102,7 @@ public class Engine {
 
     private void render() {
         renderer.render(game.getScene(), game.getCamera());
-        glfwSwapBuffers(window);
+        window.update();
     }
 
     private void loop() {
@@ -121,33 +119,11 @@ public class Engine {
         // Set the clear color
         glClearColor(0.5f, 0.5f, 0.5f, 0.0f);
 
-        /* Declare buffers for using inside the loop */
-        IntBuffer width = BufferUtils.createIntBuffer(1);
-        IntBuffer height = BufferUtils.createIntBuffer(1);
-
         /* Loop until window gets closed */
-        while (glfwWindowShouldClose(window) != GLFW_TRUE) {
-            float ratio;
-
-            /* Get width and height to calcualte the ratio */
-            glfwGetFramebufferSize(window, width, height);
-            ratio = width.get() / (float) height.get();  //TODO: update game's camera's aspect ratio
-
-            /* Rewind buffers for next get */
-            width.rewind();
-            height.rewind();
-
-            /* Set viewport and clear screen */
-            glViewport(0, 0, width.get(), height.get());
-
+        while (!window.shouldClose()) {
+            glfwPollEvents();
             update();
             render();
-
-            glfwPollEvents();
-
-            /* Flip buffers for next loop */
-            width.flip();
-            height.flip();
         }
     }
 }
