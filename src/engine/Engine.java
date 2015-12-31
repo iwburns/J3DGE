@@ -1,5 +1,6 @@
 package engine;
 
+import engine.keyboard.Keyboard;
 import engine.render.Renderer;
 import engine.window.Window;
 import org.lwjgl.Version;
@@ -17,10 +18,10 @@ public class Engine {
 
     // We need to strongly reference callback instances.
     private GLFWErrorCallback errorCallback;
-    private GLFWKeyCallback keyCallback;
 
     // The window handle
     private Window window;
+    private Keyboard keyboard;
 
     private Timer timer = new Timer();
     private Renderer renderer = new Renderer();
@@ -29,17 +30,9 @@ public class Engine {
 
     public Engine(Game g) {
         errorCallback = GLFWErrorCallback.createPrint(System.err);
-
-        //TODO: move to a key controls class or similar
-        keyCallback = new GLFWKeyCallback() {
-            @Override
-            public void invoke(long window, int key, int scancode, int action, int mods) {
-                if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
-                    glfwSetWindowShouldClose(window, GLFW_TRUE); // We will detect this in our rendering loop
-            }
-        };
-
         game = g;
+
+        keyboard = new Keyboard(game.getKeyCallback());
     }
 
     public void run() {
@@ -78,7 +71,7 @@ public class Engine {
             throw new RuntimeException("Failed to create the GLFW window");
 
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
-        glfwSetKeyCallback(window.getWindowHandle(), keyCallback);
+        glfwSetKeyCallback(window.getWindowHandle(), keyboard.getGLFWKeyCallback());
 
         // Get the resolution of the primary monitor
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());
@@ -135,7 +128,7 @@ public class Engine {
     private void cleanUpWindow() {
         // Release window and window callbacks
         window.destroy();
-        keyCallback.release();
+        keyboard.destroy();
         //TODO: add mouse here (and elsewhere)
     }
 

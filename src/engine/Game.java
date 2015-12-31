@@ -9,17 +9,22 @@ import engine.object3d.camera.PerspectiveCamera;
 import engine.render.Scene;
 import engine.util.Draw3dUtils;
 import org.joml.Vector3f;
+import org.lwjgl.glfw.GLFWKeyCallback;
 
 public class Game {
 
     public final int TARGET_FPS = 60;
     public final int TARGET_UPS = 30;
 
-    public int width = 800;
-    public int height = 600;
+    private static final int DEFAULT_WIDTH = 800;
+    private static final int DEFAULT_HEIGHT = 600;
+
+    public int width;
+    public int height;
 
     private Scene scene;
     private PerspectiveCamera camera;
+    private GLFWKeyCallback keyCallback = null;
 
     Object3d object1;
     Mesh mesh1;
@@ -27,13 +32,15 @@ public class Game {
     Mesh mesh3;
 
     public Game() {
-        scene = new Scene();
-        camera = new PerspectiveCamera(75,  (float)(width)/(height), 0.01f, 10000);
+        this(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
 
     public Game(int width, int height) {
         this.width = width;
         this.height = height;
+
+        scene = new Scene();
+        camera = new PerspectiveCamera(75,  (float)(width)/(height), 0.01f, 10000);
     }
 
     public void init() {
@@ -84,6 +91,10 @@ public class Game {
 
     public Camera getCamera() {
         return camera;
+    }
+
+    public GLFWKeyCallback getKeyCallback() {
+        return keyCallback;
     }
 
 }
