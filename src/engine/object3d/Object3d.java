@@ -1,9 +1,6 @@
 package engine.object3d;
 
-import org.joml.AxisAngle4f;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
-import org.joml.Quaternionf;
+import org.joml.*;
 
 import java.util.ArrayList;
 
@@ -45,6 +42,22 @@ public class Object3d {
 
     public void translate(Vector3f v) {
         position.add(v);
+    }
+
+    public void translateRelativeToRotation(Vector3f v) {
+        translate(rotation.transform(v));
+    }
+
+    public void moveForward(float amt) {
+        translateRelativeToRotation(new Vector3f(0, 0, -amt));
+    }
+
+    public void moveRight(float amt) {
+        translateRelativeToRotation(new Vector3f(amt, 0, 0));
+    }
+
+    public void moveUp(float amt) {
+        translateRelativeToRotation(new Vector3f(0, amt, 0));
     }
 
     public void rotate(Vector3f axis, float degrees) {

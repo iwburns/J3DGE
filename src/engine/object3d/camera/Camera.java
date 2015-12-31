@@ -22,26 +22,4 @@ public class Camera extends Object3d {
         return getWorldToLocal();
     }
 
-    //TODO: possibly move these into object3d itself
-    public void translateRelativeToLocal(Vector4f v) {
-        Vector4f worldTranslation = getLocalToWorld().transform(v);
-        translate(new Vector3f(worldTranslation.x, worldTranslation.y, worldTranslation.z));
-    }
-
-    public void moveForward(float amt) {
-        Vector4f localTargetVector = new Vector4f(0, 0, -amt, 1);
-        translateRelativeToLocal(localTargetVector);
-    }
-
-    public void moveRight(float amt) {
-        Vector4f localTargetVector = new Vector4f(amt, 0, 0, 1);
-        translateRelativeToLocal(localTargetVector);
-    }
-
-    public void moveUp(float amt) {
-        Vector4f localTargetVector = new Vector4f(0, amt, 0, 1);
-        translateRelativeToLocal(localTargetVector);
-    }
-
-
 }

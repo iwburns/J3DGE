@@ -28,7 +28,7 @@ public class Game {
 
     public Game() {
         scene = new Scene();
-        camera = new PerspectiveCamera(75,  (float)(width)/(height), 0.00001f, 100);
+        camera = new PerspectiveCamera(75,  (float)(width)/(height), 0.01f, 10000);
     }
 
     public Game(int width, int height) {
@@ -37,7 +37,10 @@ public class Game {
     }
 
     public void init() {
-        camera.translate(new Vector3f(0, 0, 5));
+//        camera.translate(new Vector3f(0, 0, 5));
+        camera.moveForward(-10);
+        camera.moveRight(2);
+        camera.moveUp(1);
 
         Material material = new Material();
         Geometry mesh1Geo = Draw3dUtils.cubeGeometry(1, 1, 1, 1, 0, 0);
@@ -68,6 +71,8 @@ public class Game {
     }
 
     public void update() {
+//        object1.translate(new Vector3f(0.01f, 0, 0));
+        mesh2.moveForward(0.1f);
         object1.rotate(new Vector3f(1, 0, 0), 1f);
         mesh1.rotate(new Vector3f(0, 0, 1), 1f);
         mesh2.rotate(new Vector3f(0, 1, 0), 1f);
