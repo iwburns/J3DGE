@@ -22,7 +22,6 @@ public class Engine {
     // The window handle
     private Window window;
 
-
     private Timer timer = new Timer();
     private Renderer renderer = new Renderer();
 
@@ -49,18 +48,19 @@ public class Engine {
         try {
             init();
             loop();
-
-            // Release window and window callbacks
-            window.destroy();
-            keyCallback.release();
+            cleanUpWindow();
         } finally {
-            // Terminate GLFW and release the GLFWErrorCallback
-            glfwTerminate();
-            errorCallback.release();
+            cleanUpGLFW();
         }
     }
 
     private void init() {
+        initGLFW();
+        initOpenGL();
+        game.init();
+    }
+
+    private void initGLFW() {
         glfwSetErrorCallback(errorCallback);
 
         // Initialize GLFW. Most GLFW functions will not work before doing this.
@@ -97,6 +97,24 @@ public class Engine {
         glfwShowWindow(window.getWindowHandle());
     }
 
+    private void initOpenGL() {
+        // This line is critical for LWJGL's interoperation with GLFW's
+        // OpenGL context, or any context that is managed externally.
+        // LWJGL detects the context that is current in the current thread,
+        // creates the GLCapabilities instance and makes the OpenGL
+        // bindings available for use.
+        GL.createCapabilities();
+        //all initialization and gl code needs to be after the above call.
+
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_PROGRAM_POINT_SIZE);
+    }
+
     private void update() {
         game.update();
     }
@@ -107,30 +125,23 @@ public class Engine {
     }
 
     private void loop() {
-        // This line is critical for LWJGL's interoperation with GLFW's
-        // OpenGL context, or any context that is managed externally.
-        // LWJGL detects the context that is current in the current thread,
-        // creates the GLCapabilities instance and makes the OpenGL
-        // bindings available for use.
-        GL.createCapabilities();
-        //all initialization and gl code needs to be after the above call.
-
-        glEnable(GL_DEPTH_TEST);
-        glEnable(GL_CULL_FACE);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(GL_PROGRAM_POINT_SIZE);
-
-        game.init();
-
-        // Set the clear color
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-
-        /* Loop until window gets closed */
         while (!window.shouldClose()) {
             glfwPollEvents();
             update();
             render();
         }
+    }
+
+    private void cleanUpWindow() {
+        // Release window and window callbacks
+        window.destroy();
+        keyCallback.release();
+        //TODO: add mouse here (and elsewhere)
+    }
+
+    private void cleanUpGLFW() {
+        // Terminate GLFW and release the GLFWErrorCallback
+        glfwTerminate();
+        errorCallback.release();
     }
 }
