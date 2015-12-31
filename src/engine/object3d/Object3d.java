@@ -11,14 +11,14 @@ public class Object3d {
     //TODO: matrix caching booleans
 
     protected Vector3f position;
-    protected Quaternionf rotation;  //TODO: find a way to support point-rotation in addition to standard rotation
+    protected Quaternionf rotation;
     protected Vector3f scale;
 
     protected Matrix4f localToWorld;
     protected Matrix4f worldToLocal;
 
-    Object3d parent;
-    ArrayList<Object3d> children;
+    protected Object3d parent;
+    protected ArrayList<Object3d> children;
 
     public Object3d() {
         position = new Vector3f();
@@ -119,5 +119,17 @@ public class Object3d {
 
     public ArrayList<Object3d> getChildren() {
         return children;
+    }
+
+    public void destroy() {
+        position = null;
+        rotation = null;
+        scale = null;
+
+        localToWorld = null;
+        worldToLocal = null;
+
+        parent = null;
+        children = null;
     }
 }
