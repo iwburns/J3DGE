@@ -4,8 +4,8 @@ import engine.Game;
 public class Main {
 
     public static void main(String[] args) {
-        Game g = new Demo();
-        Engine gameEngine = new Engine(g);
+        Demo d = new Demo();
+        Engine gameEngine = new Engine(d);
 
         gameEngine.run();
     }

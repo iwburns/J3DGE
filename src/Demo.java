@@ -1,5 +1,6 @@
 import engine.Game;
 import engine.geometry.Geometry;
+import engine.keyboard.Keyboard;
 import engine.material.Material;
 import engine.object3d.Mesh;
 import engine.object3d.Object3d;
@@ -10,11 +11,15 @@ import engine.util.Draw3dUtils;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFWKeyCallback;
 
+import static org.lwjgl.glfw.GLFW.*;
+
 public class Demo extends Game {
 
     private Scene scene;
     private PerspectiveCamera camera;
-    private GLFWKeyCallback keyCallback = null;
+    private Keyboard keyboard;
+
+    private Vector3f cameraMotion;
 
     Object3d object1;
     Mesh mesh1;
@@ -35,6 +40,9 @@ public class Demo extends Game {
 
         scene = new Scene();
         camera = new PerspectiveCamera(75,  (float)(width)/(height), 0.01f, 10000);
+
+        cameraMotion = new Vector3f();
+        initKeyboard();
 
         camera.moveForward(-10);
         camera.moveRight(2);
@@ -74,6 +82,8 @@ public class Demo extends Game {
         object1.rotate(new Vector3f(1, 0, 0), 1f);
         mesh1.rotate(new Vector3f(0, 0, 1), 1f);
         mesh2.rotate(new Vector3f(0, 1, 0), 1f);
+
+        camera.translateRelativeToRotation(cameraMotion);
     }
 
     @Override
@@ -87,7 +97,40 @@ public class Demo extends Game {
     }
 
     @Override
-    public GLFWKeyCallback getKeyCallback() {
-        return keyCallback;
+    public Keyboard getKeyboard() {
+        return keyboard;
+    }
+
+    private void initKeyboard() {
+        keyboard = new Keyboard(new GLFWKeyCallback() {
+            @Override
+            public void invoke(long window, int key, int scancode, int action, int mods) {
+                if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
+                    glfwSetWindowShouldClose(window, GLFW_TRUE);
+
+                cameraMotion = new Vector3f();
+
+                //TODO: figure out why this is so jumpy
+
+                if (key == GLFW_KEY_W && action == GLFW_PRESS) {
+                    cameraMotion.add(new Vector3f(0, 0, -0.1f));
+                }
+                if (key == GLFW_KEY_S && action == GLFW_PRESS) {
+                    cameraMotion.add(new Vector3f(0, 0,  0.1f));
+                }
+                if (key == GLFW_KEY_A && action == GLFW_PRESS) {
+                    cameraMotion.add(new Vector3f(-0.1f, 0, 0));
+                }
+                if (key == GLFW_KEY_D && action == GLFW_PRESS) {
+                    cameraMotion.add(new Vector3f( 0.1f, 0, 0));
+                }
+                if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
+                    cameraMotion.add(new Vector3f(0,  0.1f, 0));
+                }
+                if (key == GLFW_KEY_LEFT_SHIFT && action == GLFW_PRESS) {
+                    cameraMotion.add(new Vector3f(0, -0.1f, 0));
+                }
+            }
+        });
     }
 }

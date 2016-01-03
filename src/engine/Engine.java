@@ -31,8 +31,6 @@ public class Engine {
     public Engine(Game g) {
         errorCallback = GLFWErrorCallback.createPrint(System.err);
         game = g;
-
-        keyboard = new Keyboard(game.getKeyCallback());
     }
 
     public void run() {
@@ -51,6 +49,11 @@ public class Engine {
         initGLFW();
         initOpenGL();
         game.init();
+
+        //This has been moved after game.init() because the game needs to be able to define its keyboard
+        keyboard = game.getKeyboard();
+        // Setup a key callback. It will be called every time a key is pressed, repeated or released.
+        glfwSetKeyCallback(window.getWindowHandle(), keyboard.getGLFWKeyCallback());
     }
 
     private void initGLFW() {
@@ -69,9 +72,6 @@ public class Engine {
         window = new Window(game.width, game.height, "n-body-java", NULL, NULL);
         if ( window.getWindowHandle() == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
-
-        // Setup a key callback. It will be called every time a key is pressed, repeated or released.
-        glfwSetKeyCallback(window.getWindowHandle(), keyboard.getGLFWKeyCallback());
 
         // Get the resolution of the primary monitor
         GLFWVidMode vidmode = glfwGetVideoMode(glfwGetPrimaryMonitor());

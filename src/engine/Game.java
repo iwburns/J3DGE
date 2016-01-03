@@ -1,8 +1,8 @@
 package engine;
 
+import engine.keyboard.Keyboard;
 import engine.object3d.camera.Camera;
 import engine.render.Scene;
-import org.lwjgl.glfw.GLFWKeyCallback;
 
 public abstract class Game {
 
@@ -23,6 +23,6 @@ public abstract class Game {
 
     public abstract Camera getCamera();
 
-    public abstract GLFWKeyCallback getKeyCallback();
+    public abstract Keyboard getKeyboard();
 
 }
