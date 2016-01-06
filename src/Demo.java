@@ -83,7 +83,10 @@ public class Demo extends Game {
         mesh1.rotate(new Vector3f(0, 0, 1), 1f);
         mesh2.rotate(new Vector3f(0, 1, 0), 1f);
 
-        camera.translateRelativeToRotation(cameraMotion);
+        if (keyboard.isKeyDown(GLFW_KEY_W)) {
+            camera.translateRelativeToRotation(new Vector3f(0, 0, -0.1f));
+        }
+        //camera.translateRelativeToRotation(cameraMotion);
     }
 
     @Override
@@ -112,8 +115,12 @@ public class Demo extends Game {
 
                 //TODO: figure out why this is so jumpy
 
-                if (key == GLFW_KEY_W && action == GLFW_PRESS) {
-                    cameraMotion.add(new Vector3f(0, 0, -0.1f));
+                if (key == GLFW_KEY_W) {
+                    if (action == GLFW_PRESS) {
+                        keyboard.setKeyStatus(key, Keyboard.KEY_STATUS_DOWN);
+                    } else if (action == GLFW_RELEASE) {
+                        keyboard.setKeyStatus(key, Keyboard.KEY_STATUS_UP);
+                    }
                 }
                 if (key == GLFW_KEY_S && action == GLFW_PRESS) {
                     cameraMotion.add(new Vector3f(0, 0,  0.1f));
