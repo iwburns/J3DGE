@@ -83,10 +83,33 @@ public class Demo extends Game {
         mesh1.rotate(new Vector3f(0, 0, 1), 1f);
         mesh2.rotate(new Vector3f(0, 1, 0), 1f);
 
+        updateCamera();
+    }
+
+    private void updateCamera() {
+        cameraMotion = new Vector3f();
+        float moveAmt = 0.1f;
+
         if (keyboard.isKeyDown(GLFW_KEY_W)) {
-            camera.translateRelativeToRotation(new Vector3f(0, 0, -0.1f));
+            cameraMotion.add(new Vector3f(0, 0, -moveAmt));
         }
-        //camera.translateRelativeToRotation(cameraMotion);
+        if (keyboard.isKeyDown(GLFW_KEY_S)) {
+            cameraMotion.add(new Vector3f(0, 0, moveAmt));
+        }
+        if (keyboard.isKeyDown(GLFW_KEY_A)) {
+            cameraMotion.add(new Vector3f(-moveAmt, 0, 0));
+        }
+        if (keyboard.isKeyDown(GLFW_KEY_D)) {
+            cameraMotion.add(new Vector3f(moveAmt, 0, 0));
+        }
+        if (keyboard.isKeyDown(GLFW_KEY_SPACE)) {
+            cameraMotion.add(new Vector3f(0, moveAmt, 0));
+        }
+        if (keyboard.isKeyDown(GLFW_KEY_LEFT_SHIFT)) {
+            cameraMotion.add(new Vector3f(0, -moveAmt, 0));
+        }
+
+        camera.translateRelativeToRotation(cameraMotion);
     }
 
     @Override
@@ -105,39 +128,15 @@ public class Demo extends Game {
     }
 
     private void initKeyboard() {
-        keyboard = new Keyboard(new GLFWKeyCallback() {
-            @Override
-            public void invoke(long window, int key, int scancode, int action, int mods) {
-                if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
-                    glfwSetWindowShouldClose(window, GLFW_TRUE);
-
-                cameraMotion = new Vector3f();
-
-                //TODO: figure out why this is so jumpy
-
-                if (key == GLFW_KEY_W) {
-                    if (action == GLFW_PRESS) {
-                        keyboard.setKeyStatus(key, Keyboard.KEY_STATUS_DOWN);
-                    } else if (action == GLFW_RELEASE) {
-                        keyboard.setKeyStatus(key, Keyboard.KEY_STATUS_UP);
-                    }
-                }
-                if (key == GLFW_KEY_S && action == GLFW_PRESS) {
-                    cameraMotion.add(new Vector3f(0, 0,  0.1f));
-                }
-                if (key == GLFW_KEY_A && action == GLFW_PRESS) {
-                    cameraMotion.add(new Vector3f(-0.1f, 0, 0));
-                }
-                if (key == GLFW_KEY_D && action == GLFW_PRESS) {
-                    cameraMotion.add(new Vector3f( 0.1f, 0, 0));
-                }
-                if (key == GLFW_KEY_SPACE && action == GLFW_PRESS) {
-                    cameraMotion.add(new Vector3f(0,  0.1f, 0));
-                }
-                if (key == GLFW_KEY_LEFT_SHIFT && action == GLFW_PRESS) {
-                    cameraMotion.add(new Vector3f(0, -0.1f, 0));
-                }
-            }
-        });
+        int[] keys = {
+                GLFW_KEY_W,
+                GLFW_KEY_A,
+                GLFW_KEY_S,
+                GLFW_KEY_D,
+                GLFW_KEY_SPACE,
+                GLFW_KEY_LEFT_SHIFT,
+                GLFW_KEY_ESCAPE
+        };
+        keyboard = new Keyboard(keys);
     }
 }
