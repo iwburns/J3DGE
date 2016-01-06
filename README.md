@@ -7,4 +7,5 @@
   * Update: LWJGL #3.0.0 build 8 has been released and n-body-java seems to work fine with it.
 1. Go get [JOML](http://joml-ci.github.io/JOML/)
   * At the time of this writing, JOML has moved to maven.  This project assumes JOML version 1.6.6.
+  * Update: JOML 1.6.7 has been realeased and n-body java seems to work fine with it.
 
