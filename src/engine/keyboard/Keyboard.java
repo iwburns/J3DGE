@@ -14,35 +14,24 @@ public class Keyboard {
     private static GLFWKeyCallback DEFAULT_KEY_CALLBACK = new GLFWKeyCallback() {
         @Override
         public void invoke(long window, int key, int scancode, int action, int mods) {
-            if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
+            if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE)
                 glfwSetWindowShouldClose(window, GLFW_TRUE); // We will detect this in our rendering loop
         }
     };
 
     private GLFWKeyCallback keyCallback;
     private HashMap<Integer, Integer> keyStatuses;
-    private int[] trackedKeys;  //TODO: make this an array list so that we can dynamically add and remove keys
 
-    public Keyboard(int[] keys) {
-        trackedKeys = keys;
+    public Keyboard() {
         keyStatuses = new HashMap<>();
-
-        for (int currentKey : trackedKeys) {
-            setKeyStatus(currentKey, KEY_STATUS_UP);
-        }
-
         keyCallback = new GLFWKeyCallback() {
             @Override
             public void invoke(long window, int key, int scancode, int action, int mods) {
 
-                if (keyStatuses.get(key) != null) { //if we are tracking this key
-
-                    if (action == GLFW_PRESS) {
-                        setKeyStatus(key, KEY_STATUS_DOWN);
-                    } else if (action == GLFW_RELEASE) {
-                        setKeyStatus(key, KEY_STATUS_UP);
-                    }
-
+                if (action == GLFW_PRESS) {
+                    setKeyStatus(key, KEY_STATUS_DOWN);
+                } else if (action == GLFW_RELEASE) {
+                    setKeyStatus(key, KEY_STATUS_UP);
                 }
             }
         };
