@@ -40,9 +40,7 @@ public class Demo extends Game {
 
         scene = new Scene();
         camera = new PerspectiveCamera(75,  (float)(width)/(height), 0.01f, 10000);
-
-        cameraMotion = new Vector3f();
-        initKeyboard();
+        keyboard = new Keyboard();
 
         camera.moveForward(-10);
         camera.moveRight(2);
@@ -75,6 +73,8 @@ public class Demo extends Game {
         mesh1.addChild(mesh2);
         mesh2.addChild(mesh3);
     }
+
+    //TODO: add a deltaTime to the update function.
 
     @Override
     public void update() {
@@ -125,9 +125,5 @@ public class Demo extends Game {
     @Override
     public Keyboard getKeyboard() {
         return keyboard;
-    }
-
-    private void initKeyboard() {
-        keyboard = new Keyboard();
     }
 }
