@@ -49,6 +49,7 @@ public class Engine {
         initGLFW();
         initOpenGL();
         game.init();
+        timer.init();
 
         //This has been moved after game.init() because the game needs to be able to define its keyboard
         keyboard = game.getKeyboard();
@@ -84,7 +85,7 @@ public class Engine {
         // Make the OpenGL context current
         glfwMakeContextCurrent(window.getWindowHandle());
         // Enable v-sync
-        glfwSwapInterval(1);
+//        glfwSwapInterval(1);
 
         // Make the window visible
         glfwShowWindow(window.getWindowHandle());
@@ -108,8 +109,8 @@ public class Engine {
         glEnable(GL_PROGRAM_POINT_SIZE);
     }
 
-    private void update() {
-        game.update();
+    private void update(float delta) {
+        game.update(delta);
     }
 
     private void render() {
@@ -118,10 +119,21 @@ public class Engine {
     }
 
     private void loop() {
+
+        float delta;
+
         while (!window.shouldClose()) {
+            delta = timer.getDelta();
             glfwPollEvents();
-            update();
+
+            update(delta);
+            timer.updateUPS();
+
             render();
+            timer.updateFPS();
+
+            timer.update();
+            //TODO: add some kind of sync method similar to this: https://github.com/SilverTiger/lwjgl3-tutorial/blob/master/src/silvertiger/tutorial/lwjgl/core/Game.java
         }
     }
 

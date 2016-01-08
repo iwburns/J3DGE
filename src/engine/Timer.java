@@ -53,7 +53,6 @@ public class Timer {
         return fps > 0 ? fps : fpsCount;
     }
 
-
     public int getUps() {
         return ups > 0 ? ups : upsCount;
     }

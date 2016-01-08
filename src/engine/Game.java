@@ -14,7 +14,7 @@ public abstract class Game {
 
     public abstract void init();
 
-    public abstract void update();
+    public abstract void update(float delta);
 
     public abstract Scene getScene();
 

@@ -80,7 +80,8 @@ public class Demo extends Game {
     //TODO: add a deltaTime to the update function.
 
     @Override
-    public void update() {
+    public void update(float delta) {
+        System.out.println("Time delta: " + delta);
         mesh2.moveForward(0.1f);
         object1.rotate(new Vector3f(1, 0, 0), 1f);
         mesh1.rotate(new Vector3f(0, 0, 1), 1f);
