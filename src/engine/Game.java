@@ -6,14 +6,11 @@ import engine.render.Scene;
 
 public abstract class Game {
 
-    public final int TARGET_FPS = 60;
-    public final int TARGET_UPS = 30;
+    protected static final int DEFAULT_TARGET_FPS = 60;
+    protected static final int DEFAULT_TARGET_UPS = 30;
 
     protected static final int DEFAULT_WIDTH = 800;
     protected static final int DEFAULT_HEIGHT = 600;
-
-    public int width;
-    public int height;
 
     public abstract void init();
 
@@ -24,5 +21,13 @@ public abstract class Game {
     public abstract Camera getCamera();
 
     public abstract Keyboard getKeyboard();
+
+    public abstract int getWidth();
+
+    public abstract int getHeight();
+
+    public abstract int getTargetFps();
+
+    public abstract int getTargetUps();
 
 }

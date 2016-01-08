@@ -26,6 +26,9 @@ public class Demo extends Game {
     Mesh mesh2;
     Mesh mesh3;
 
+    private int width;
+    private int height;
+
     public Demo() {
         this(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
@@ -125,5 +128,25 @@ public class Demo extends Game {
     @Override
     public Keyboard getKeyboard() {
         return keyboard;
+    }
+
+    @Override
+    public int getWidth() {
+        return DEFAULT_WIDTH;
+    }
+
+    @Override
+    public int getHeight() {
+        return DEFAULT_HEIGHT;
+    }
+
+    @Override
+    public int getTargetFps() {
+        return DEFAULT_TARGET_FPS;
+    }
+
+    @Override
+    public int getTargetUps() {
+        return DEFAULT_TARGET_UPS;
     }
 }
