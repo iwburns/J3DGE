@@ -6,7 +6,6 @@ import engine.render.Renderer;
 import engine.window.Window;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
-import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL;
 
@@ -133,6 +132,7 @@ public class Engine {
             glfwPollEvents();
 
             update(delta);
+            mouse.resetDeltas();
             timer.updateUPS();
 
             render();

@@ -10,7 +10,6 @@ import engine.object3d.camera.PerspectiveCamera;
 import engine.render.Scene;
 import engine.util.Draw3dUtils;
 import org.joml.Vector3f;
-import org.lwjgl.glfw.GLFWKeyCallback;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -88,10 +87,6 @@ public class Demo extends Game {
         mesh2.rotate(new Vector3f(0, 1, 0), 50 * delta);
 
         updateCamera(delta);
-
-        if (mouse.isButtonDown(GLFW_MOUSE_BUTTON_1)) {
-            System.out.println(mouse.getxPos() + ", " + mouse.getyPos());
-        }
     }
 
     private void updateCamera(float delta) {
@@ -118,6 +113,19 @@ public class Demo extends Game {
         }
 
         camera.translateRelativeToRotation(cameraMotion);
+
+        if (mouse.isButtonDown(GLFW_MOUSE_BUTTON_1)) {
+
+            float yDelta = (float) mouse.getDeltaY();
+            float xDelta = (float) mouse.getDeltaX();
+
+            System.out.println("Delta: " + mouse.getDeltaX() + ", " + mouse.getDeltaY());
+
+            camera.rotate(new Vector3f(1, 0, 0), -yDelta);
+            camera.rotate(new Vector3f(0, 1, 0), -xDelta);
+        }
+
+
     }
 
     @Override

@@ -18,8 +18,8 @@ public class Mouse {
 
     private HashMap<Integer, Integer> buttonStatuses;
 
-    private double xDelta;
-    private double yDelta;
+    private double deltaX;
+    private double deltaY;
 
     private double xPos;
     private double yPos;
@@ -31,11 +31,14 @@ public class Mouse {
         xPos = 0;
         yPos = 0;
 
+        deltaX = 0;
+        deltaY = 0;
+
         cursorPosCallback = new GLFWCursorPosCallback() {
             @Override
             public void invoke(long window, double xpos, double ypos) {
-                xDelta = xpos - xPos;
-                yDelta = ypos - yPos;
+                deltaX = xpos - xPos;
+                deltaY = ypos - yPos;
 
                 xPos = xpos;
                 yPos = ypos;
@@ -73,12 +76,12 @@ public class Mouse {
         return buttonStatuses.get(button) == MOUSE_BUTTON_STATUS_DOWN;
     }
 
-    public double getxDelta() {
-        return xDelta;
+    public double getDeltaX() {
+        return deltaX;
     }
 
-    public double getyDelta() {
-        return yDelta;
+    public double getDeltaY() {
+        return deltaY;
     }
 
     public double getxPos() {
@@ -87,5 +90,10 @@ public class Mouse {
 
     public double getyPos() {
         return yPos;
+    }
+
+    public void resetDeltas() {
+        deltaX = 0;
+        deltaY = 0;
     }
 }
