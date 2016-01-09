@@ -6,8 +6,6 @@ import java.util.ArrayList;
 
 public class Object3d {
 
-    //TODO: write a destroy
-
     //TODO: matrix caching booleans
 
     protected Vector3f position;
@@ -64,6 +62,29 @@ public class Object3d {
         rotation.rotateAxis((float)Math.toRadians(degrees), axis);
     }
 
+    public void rotateX(float degrees) {
+        Vector3f localRotationAxis = new Vector3f(1, 0, 0);
+        rotate(localRotationAxis, degrees);
+    }
+
+    public void rotateY(float degrees, boolean maintainWorldUpVector) {
+        Vector3f localRotationAxis = new Vector3f(0, 1, 0);
+
+        if (maintainWorldUpVector) {
+            Quaternionf inverseRotation = new Quaternionf();
+            rotation.invert(inverseRotation);
+
+            localRotationAxis.rotate(inverseRotation);
+        }
+
+        rotate(localRotationAxis, degrees);
+    }
+
+    public void rotateZ(float degrees) {
+        Vector3f localRotationAxis = new Vector3f(0, 0, 1);
+        rotate(localRotationAxis, degrees);
+    }
+
     public void scale(Vector3f v) {
         scale.x *= v.x;
         scale.y *= v.y;
@@ -115,6 +136,10 @@ public class Object3d {
 
     public Vector3f getScale() {
         return scale;
+    }
+
+    public Object3d getParent() {
+        return parent;
     }
 
     public ArrayList<Object3d> getChildren() {

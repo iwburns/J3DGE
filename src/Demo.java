@@ -123,7 +123,7 @@ public class Demo extends Game {
             xRotAmt= (float) mouse.getDeltaX() * rotationMultiplier;
             yRotAmt= (float) mouse.getDeltaY() * rotationMultiplier;
 
-            camera.rotateY(-xRotAmt);
+            camera.rotateY(-xRotAmt, true);
             camera.rotateX(-yRotAmt);
         }
     }
