@@ -1,6 +1,7 @@
 package engine;
 
 import engine.keyboard.Keyboard;
+import engine.mouse.Mouse;
 import engine.render.Renderer;
 import engine.window.Window;
 import org.lwjgl.Version;
@@ -22,6 +23,7 @@ public class Engine {
     // The window handle
     private Window window;
     private Keyboard keyboard;
+    private Mouse mouse;
 
     private Timer timer = new Timer();
     private Renderer renderer = new Renderer();
@@ -53,8 +55,12 @@ public class Engine {
 
         //This has been moved after game.init() because the game needs to be able to define its keyboard
         keyboard = game.getKeyboard();
+        mouse = game.getMouse();
+
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
         glfwSetKeyCallback(window.getWindowHandle(), keyboard.getGLFWKeyCallback());
+        glfwSetCursorPosCallback(window.getWindowHandle(), mouse.getCursorPosCallback());
+        glfwSetMouseButtonCallback(window.getWindowHandle(), mouse.getMouseButtonCallback());
     }
 
     private void initGLFW() {

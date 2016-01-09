@@ -2,6 +2,7 @@ import engine.Game;
 import engine.geometry.Geometry;
 import engine.keyboard.Keyboard;
 import engine.material.Material;
+import engine.mouse.Mouse;
 import engine.object3d.Mesh;
 import engine.object3d.Object3d;
 import engine.object3d.camera.Camera;
@@ -18,6 +19,7 @@ public class Demo extends Game {
     private Scene scene;
     private PerspectiveCamera camera;
     private Keyboard keyboard;
+    private Mouse mouse;
 
     private Vector3f cameraMotion;
 
@@ -44,6 +46,7 @@ public class Demo extends Game {
         scene = new Scene();
         camera = new PerspectiveCamera(75,  (float)(width)/(height), 0.01f, 10000);
         keyboard = new Keyboard();
+        mouse = new Mouse();
 
         camera.moveForward(-10);
         camera.moveRight(2);
@@ -77,17 +80,18 @@ public class Demo extends Game {
         mesh2.addChild(mesh3);
     }
 
-    //TODO: add a deltaTime to the update function.
-
     @Override
     public void update(float delta) {
-        System.out.println("Time delta: " + delta);
         mesh2.moveForward(5f * delta);
         object1.rotate(new Vector3f(1, 0, 0), 50 * delta);
         mesh1.rotate(new Vector3f(0, 0, 1), 50 * delta);
         mesh2.rotate(new Vector3f(0, 1, 0), 50 * delta);
 
         updateCamera(delta);
+
+        if (mouse.isButtonDown(GLFW_MOUSE_BUTTON_1)) {
+            System.out.println(mouse.getxPos() + ", " + mouse.getyPos());
+        }
     }
 
     private void updateCamera(float delta) {
@@ -129,6 +133,11 @@ public class Demo extends Game {
     @Override
     public Keyboard getKeyboard() {
         return keyboard;
+    }
+
+    @Override
+    public Mouse getMouse() {
+        return mouse;
     }
 
     @Override

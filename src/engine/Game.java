@@ -1,6 +1,7 @@
 package engine;
 
 import engine.keyboard.Keyboard;
+import engine.mouse.Mouse;
 import engine.object3d.camera.Camera;
 import engine.render.Scene;
 
@@ -21,6 +22,8 @@ public abstract class Game {
     public abstract Camera getCamera();
 
     public abstract Keyboard getKeyboard();
+
+    public abstract Mouse getMouse();
 
     public abstract int getWidth();
 
