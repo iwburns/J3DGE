@@ -16,16 +16,17 @@ import static org.lwjgl.opengl.GL20.glUseProgram;
 
 public class Renderer {
 
-    //TODO: add some sort of caching so that we can change ShaderPrograms and send buffer data less often
-
     private FloatBuffer projectionBuffer;
     private FloatBuffer viewBuffer;
     private FloatBuffer modelBuffer;
+
+    private ShaderProgram currentProgram;
 
     public Renderer() {
         projectionBuffer = BufferUtils.createFloatBuffer(16);
         viewBuffer = BufferUtils.createFloatBuffer(16);
         modelBuffer = BufferUtils.createFloatBuffer(16);
+        currentProgram = null;
     }
 
     public void render(Scene scene, Camera camera) {
@@ -38,22 +39,18 @@ public class Renderer {
             drawObject(obj);
         }
 
-        glUseProgram(0);
+        clearShaderProgram();
     }
 
     private void drawObject(Object3d obj) {
         if (obj instanceof Mesh) {
             Mesh mesh = (Mesh) obj;
 
+            updateCurrentShaderProgram(mesh.getMaterial().getProgram());
+
+            //get and send buffer data for current model
             mesh.getModel().get(modelBuffer);
-
-            ShaderProgram program = mesh.getMaterial().getProgram();
-            glUseProgram(program.getProgramId());
-
-            //send buffer data to opengl shader uniforms (the ones for this ShaderProgram)
-            glUniformMatrix4fv(program.getUniformLocation("projection"), false, projectionBuffer);
-            glUniformMatrix4fv(program.getUniformLocation("view"), false, viewBuffer);
-            glUniformMatrix4fv(program.getUniformLocation("model"), false, modelBuffer);
+            glUniformMatrix4fv(currentProgram.getUniformLocation("model"), false, modelBuffer);
 
             mesh.bindVao();
             mesh.enableVertexAttributes();
@@ -76,10 +73,27 @@ public class Renderer {
         }
     }
 
+    private void updateCurrentShaderProgram(ShaderProgram program) {
+        if (currentProgram == null || currentProgram != program) {
+            currentProgram = program;
+            glUseProgram(currentProgram.getProgramId());
+
+            //re-send buffer data to opengl shader uniforms (the ones for this ShaderProgram)
+            glUniformMatrix4fv(currentProgram.getUniformLocation("projection"), false, projectionBuffer);
+            glUniformMatrix4fv(currentProgram.getUniformLocation("view"), false, viewBuffer);
+        }
+    }
+
+    private void clearShaderProgram() {
+        glUseProgram(0);
+        currentProgram = null;
+    }
+
     public void destroy() {
         projectionBuffer = null;
         viewBuffer = null;
         modelBuffer = null;
+        currentProgram = null;
     }
 
 }
