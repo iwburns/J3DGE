@@ -11,8 +11,8 @@ import java.nio.FloatBuffer;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
 import static org.lwjgl.opengl.GL15.glBindBuffer;
-import static org.lwjgl.opengl.GL20.glUniformMatrix4fv;
-import static org.lwjgl.opengl.GL20.glUseProgram;
+import static org.lwjgl.opengl.GL20.*;
+import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
 public class Renderer {
 
@@ -52,8 +52,8 @@ public class Renderer {
             mesh.getModel().get(modelBuffer);
             glUniformMatrix4fv(currentProgram.getUniformLocation("model"), false, modelBuffer);
 
-            mesh.bindVao();
-            mesh.enableVertexAttributes();
+            bindVao(mesh);
+            enableVertexAttributes();
 
             if (mesh.isIndexed()) {
                 //todo: move these into the mesh if possible to clean this up a bit.
@@ -64,13 +64,29 @@ public class Renderer {
                 glDrawArrays(mesh.getGeometry().getDrawMode(), 0, mesh.getVerticesCount());
             }
 
-            mesh.disableVertexAttributes();
-            mesh.unbindVao();
+            disableVertexAttributes();
+            unbindVao();
         }
 
         for (Object3d child: obj.getChildren()) {
             drawObject(child);
         }
+    }
+
+    private void bindVao(Mesh mesh) {
+        glBindVertexArray(mesh.getVaoID());
+    }
+
+    private void unbindVao() {
+        glBindVertexArray(0);
+    }
+
+    private void enableVertexAttributes() {
+        currentProgram.getAttributeLocations().forEach(location -> glEnableVertexAttribArray(location));
+    }
+
+    private void disableVertexAttributes() {
+        currentProgram.getAttributeLocations().forEach(location -> glDisableVertexAttribArray(location));
     }
 
     private void updateCurrentShaderProgram(ShaderProgram program) {

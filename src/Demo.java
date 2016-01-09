@@ -118,7 +118,7 @@ public class Demo extends Game {
 
         camera.translateRelativeToRotation(cameraMotion);
 
-        if (mouse.isButtonDown(GLFW_MOUSE_BUTTON_1)) {
+        if (mouse.isButtonDown(GLFW_MOUSE_BUTTON_2)) {
 
             xRotAmt= (float) mouse.getDeltaX() * rotationMultiplier;
             yRotAmt= (float) mouse.getDeltaY() * rotationMultiplier;

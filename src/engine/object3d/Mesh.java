@@ -42,16 +42,12 @@ public class Mesh extends Object3d {
         setupBuffers();
     }
 
-    public void bindVao() {
+    private void bindVao() {
         glBindVertexArray(vaoID);
     }
 
     public void disableVertexAttributes() {
         material.getProgram().getAttributeLocations().forEach(location -> glDisableVertexAttribArray(location));
-    }
-
-    public void enableVertexAttributes() {
-        material.getProgram().getAttributeLocations().forEach(location -> glEnableVertexAttribArray(location));
     }
 
     public int getColorsCount() {
@@ -156,7 +152,7 @@ public class Mesh extends Object3d {
         }
     }
 
-    public void unbindVao() {
+    private void unbindVao() {
         glBindVertexArray(0);
     }
 
