@@ -75,7 +75,7 @@ public class Engine {
         glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
 
         // Create the window
-        window = new Window(game.getWidth(), game.getHeight(), "n-body-java", NULL, NULL);
+        window = new Window(game.getWidth(), game.getHeight(), "J3DGE", NULL, NULL);
         if ( window.getWindowHandle() == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
