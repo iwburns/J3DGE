@@ -2,6 +2,8 @@ package engine.object3d;
 
 import engine.geometry.Geometry;
 import engine.material.Material;
+import engine.opengl.VertexArrayObject;
+import engine.opengl.VertexBufferObject;
 import engine.shader.ShaderProgram;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
@@ -26,11 +28,11 @@ public class Mesh extends Object3d {
     Geometry geometry;
     Material material;
 
-    private int vaoID;
+    private VertexArrayObject vao;
 
-    private int verticesVboID;
-    private int colorsVboID;
-    private int indicesVboID;
+    private VertexBufferObject verticesVbo;
+    private VertexBufferObject colorsVbo;
+    private VertexBufferObject indicesVbo;
 
     private int verticesCount;
     private int colorsCount;
@@ -43,7 +45,7 @@ public class Mesh extends Object3d {
     }
 
     private void bindVao() {
-        glBindVertexArray(vaoID);
+        glBindVertexArray(vao.getId());
     }
 
     public void disableVertexAttributes() {
@@ -55,7 +57,7 @@ public class Mesh extends Object3d {
     }
 
     public int getColorsVboID() {
-        return colorsVboID;
+        return colorsVbo.getId();
     }
 
     public Geometry getGeometry() {
@@ -67,7 +69,7 @@ public class Mesh extends Object3d {
     }
 
     public int getIndicesVboID() {
-        return indicesVboID;
+        return indicesVbo.getId();
     }
 
     public Material getMaterial() {
@@ -79,7 +81,7 @@ public class Mesh extends Object3d {
     }
 
     public int getVaoID() {
-        return vaoID;
+        return vao.getId();
     }
 
     public int getVerticesCount() {
@@ -87,7 +89,7 @@ public class Mesh extends Object3d {
     }
 
     public int getVerticesVboID() {
-        return verticesVboID;
+        return verticesVbo.getId();
     }
 
     public boolean isIndexed() {
@@ -113,19 +115,19 @@ public class Mesh extends Object3d {
         colorsCount = colors.length;
         int colorLocation = program.getAttributeLocation(program.colorAttributeName);
 
-        vaoID = glGenVertexArrays();
-        glBindVertexArray(vaoID);
+        vao = new VertexArrayObject();
+        glBindVertexArray(vao.getId());
         {
-            verticesVboID = glGenBuffers();
-            glBindBuffer(GL_ARRAY_BUFFER, verticesVboID);
+            verticesVbo = new VertexBufferObject();
+            glBindBuffer(GL_ARRAY_BUFFER, verticesVbo.getId());
             {
                 glBufferData(GL_ARRAY_BUFFER, verticesBuffer, GL_DYNAMIC_DRAW);
                 glVertexAttribPointer(positionLocation, 4, GL_FLOAT, false, 0, 0);
             }
             glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-            colorsVboID = glGenBuffers();
-            glBindBuffer(GL_ARRAY_BUFFER, colorsVboID);
+            colorsVbo = new VertexBufferObject();
+            glBindBuffer(GL_ARRAY_BUFFER, colorsVbo.getId());
             {
                 glBufferData(GL_ARRAY_BUFFER, colorsBuffer, GL_DYNAMIC_DRAW);
                 glVertexAttribPointer(colorLocation, 4, GL_FLOAT, false, 0, 0);
@@ -140,15 +142,14 @@ public class Mesh extends Object3d {
             indicesBuffer.flip();
             indicesCount = indices.length;
 
-            indicesVboID = glGenBuffers();
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesVboID);
+            indicesVbo = new VertexBufferObject();
+            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesVbo.getId());
             {
                 glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_DYNAMIC_DRAW);
             }
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
         } else {
             indicesCount = 0;
-            indicesVboID = -1;
         }
     }
 
@@ -162,9 +163,9 @@ public class Mesh extends Object3d {
         tempBuffer.put(vertices);
         tempBuffer.flip();
 
-        glBindVertexArray(vaoID);
+        glBindVertexArray(vao.getId());
         {
-            glBindBuffer(GL_ARRAY_BUFFER, colorsVboID);
+            glBindBuffer(GL_ARRAY_BUFFER, colorsVbo.getId());
             {
                 glBufferData(GL_ARRAY_BUFFER, tempBuffer, GL_DYNAMIC_DRAW);
             }
@@ -179,9 +180,9 @@ public class Mesh extends Object3d {
         tempBuffer.put(vertices);
         tempBuffer.flip();
 
-        glBindVertexArray(vaoID);
+        glBindVertexArray(vao.getId());
         {
-            glBindBuffer(GL_ARRAY_BUFFER, verticesVboID);
+            glBindBuffer(GL_ARRAY_BUFFER, verticesVbo.getId());
             {
                 glBufferData(GL_ARRAY_BUFFER, tempBuffer, GL_DYNAMIC_DRAW);
             }
@@ -202,16 +203,16 @@ public class Mesh extends Object3d {
             deleteBuffers();
         }
         unbindVao();
-        glDeleteVertexArrays(vaoID);
+        glDeleteVertexArrays(vao.getId());
     }
 
     private void deleteBuffers() {
         glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glDeleteBuffers(verticesVboID);
-        glDeleteBuffers(colorsVboID);
+        glDeleteBuffers(verticesVbo.getId());
+        glDeleteBuffers(colorsVbo.getId());
         if (geometry.isIndexed()) {
             glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-            glDeleteBuffers(indicesVboID);
+            glDeleteBuffers(indicesVbo.getId());
         }
     }
 
