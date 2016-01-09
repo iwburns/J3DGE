@@ -92,6 +92,8 @@ public class Demo extends Game {
     private void updateCamera(float delta) {
         float moveAmt = 5f * delta;
         float rotationMultiplier = 35f * delta;
+        float xRotAmt;
+        float yRotAmt;
 
         cameraMotion = new Vector3f();
 
@@ -118,14 +120,12 @@ public class Demo extends Game {
 
         if (mouse.isButtonDown(GLFW_MOUSE_BUTTON_1)) {
 
-            float yDelta = (float) mouse.getDeltaY() * rotationMultiplier;
-            float xDelta = (float) mouse.getDeltaX() * rotationMultiplier;
+            xRotAmt= (float) mouse.getDeltaX() * rotationMultiplier;
+            yRotAmt= (float) mouse.getDeltaY() * rotationMultiplier;
 
-            camera.rotate(new Vector3f(1, 0, 0), -yDelta);
-            camera.rotate(new Vector3f(0, 1, 0), -xDelta);
+            camera.rotateY(-xRotAmt);
+            camera.rotateX(-yRotAmt);
         }
-
-
     }
 
     @Override
