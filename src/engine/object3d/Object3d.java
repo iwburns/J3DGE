@@ -5,8 +5,9 @@ import org.joml.*;
 import java.util.ArrayList;
 
 public class Object3d {
-
-    //TODO: matrix caching booleans
+    
+    private boolean localToWorldNeedsUpdate;
+    private boolean worldToLocalNeedsUpdate;
 
     protected Vector3f position;
     protected Quaternionf rotation;
@@ -19,6 +20,9 @@ public class Object3d {
     protected ArrayList<Object3d> children;
 
     public Object3d() {
+        localToWorldNeedsUpdate = true;
+        worldToLocalNeedsUpdate = true;
+
         position = new Vector3f();
         rotation = new Quaternionf();
         scale = new Vector3f(1, 1, 1);
@@ -28,6 +32,13 @@ public class Object3d {
 
         parent = null;
         children = new ArrayList<>();
+    }
+
+    private void setUpdateFlags(boolean b) {
+        localToWorldNeedsUpdate = b;
+        worldToLocalNeedsUpdate = b;
+
+        children.forEach((child) -> child.setUpdateFlags(b));
     }
 
     public void addChild(Object3d obj) {
@@ -40,6 +51,7 @@ public class Object3d {
 
     public void translate(Vector3f v) {
         position.add(v);
+        setUpdateFlags(true);
     }
 
     public void translateRelativeToRotation(Vector3f v) {
@@ -60,6 +72,7 @@ public class Object3d {
 
     public void rotate(Vector3f axis, float degrees) {
         rotation.rotateAxis((float)Math.toRadians(degrees), axis);
+        setUpdateFlags(true);
     }
 
     public void rotateX(float degrees) {
@@ -89,13 +102,21 @@ public class Object3d {
         scale.x *= v.x;
         scale.y *= v.y;
         scale.z *= v.z;
+        setUpdateFlags(true);
     }
 
     public void scale(float f) {
-        scale.mul(f);
+        scale(new Vector3f(f, f, f));
     }
 
     public Matrix4f getLocalToWorld() {
+        if (localToWorldNeedsUpdate) {
+            updateLocalToWorld();
+        }
+        return localToWorld;
+    }
+
+    private void updateLocalToWorld() {
         /*
             Because we want to do the following in this order:
                 1. scale the object
@@ -114,16 +135,19 @@ public class Object3d {
         localToWorld.translate(position);
         localToWorld.rotate(rotation);
         localToWorld.scale(scale);
-
-        return localToWorld;
+        localToWorldNeedsUpdate = false;
     }
 
     public Matrix4f getWorldToLocal() {
-        worldToLocal = new Matrix4f();
-
-        getLocalToWorld().invert(worldToLocal);
-
+        if (worldToLocalNeedsUpdate) {
+            updateWorldToLocal();
+        }
         return worldToLocal;
+    }
+
+    private void updateWorldToLocal() {
+        getLocalToWorld().invert(worldToLocal);
+        worldToLocalNeedsUpdate = false;
     }
 
     public Vector3f getPosition() {
