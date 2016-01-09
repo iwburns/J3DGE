@@ -1,4 +1,4 @@
-package engine.opengl;
+package engine.opengl.vao;
 
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
