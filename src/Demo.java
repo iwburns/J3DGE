@@ -90,8 +90,10 @@ public class Demo extends Game {
     }
 
     private void updateCamera(float delta) {
-        cameraMotion = new Vector3f();
         float moveAmt = 5f * delta;
+        float rotationMultiplier = 35f * delta;
+
+        cameraMotion = new Vector3f();
 
         if (keyboard.isKeyDown(GLFW_KEY_W)) {
             cameraMotion.add(new Vector3f(0, 0, -moveAmt));
@@ -116,10 +118,8 @@ public class Demo extends Game {
 
         if (mouse.isButtonDown(GLFW_MOUSE_BUTTON_1)) {
 
-            float yDelta = (float) mouse.getDeltaY();
-            float xDelta = (float) mouse.getDeltaX();
-
-            System.out.println("Delta: " + mouse.getDeltaX() + ", " + mouse.getDeltaY());
+            float yDelta = (float) mouse.getDeltaY() * rotationMultiplier;
+            float xDelta = (float) mouse.getDeltaX() * rotationMultiplier;
 
             camera.rotate(new Vector3f(1, 0, 0), -yDelta);
             camera.rotate(new Vector3f(0, 1, 0), -xDelta);
