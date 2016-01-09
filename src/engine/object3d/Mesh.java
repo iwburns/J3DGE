@@ -25,9 +25,9 @@ public class Mesh extends Object3d {
 
     private VertexArrayObject vao;
 
-    private VertexBufferObject verticesVbo;
-    private VertexBufferObject colorsVbo;
-    private VertexBufferObject indicesVbo;
+    private VertexBufferObject<FloatBuffer> verticesVbo;
+    private VertexBufferObject<FloatBuffer> colorsVbo;
+    private VertexBufferObject<ShortBuffer> indicesVbo;
 
     private int verticesCount;
     private int colorsCount;
@@ -90,37 +90,38 @@ public class Mesh extends Object3d {
     private void setupBuffers() {
         float[] vertices = geometry.getVertices();
         float[] colors = geometry.getColors();
-        short[] indices = geometry.getIndices();
 
         ShaderProgram program = material.getProgram();
 
-        FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(vertices.length);
+        verticesCount = vertices.length;
+        FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(verticesCount);
         verticesBuffer.put(vertices);
         verticesBuffer.flip();
-        verticesCount = vertices.length;
+        verticesVbo = new VertexBufferObject<>(VertexBufferObject.BUFFER_TARGET_ARRAY_BUFFER);
+        verticesVbo.setBufferData(verticesBuffer);
         int positionLocation = program.getAttributeLocation(program.positionAttributeName);
 
-        FloatBuffer colorsBuffer = BufferUtils.createFloatBuffer(colors.length);
+        colorsCount = colors.length;
+        FloatBuffer colorsBuffer = BufferUtils.createFloatBuffer(colorsCount);
         colorsBuffer.put(colors);
         colorsBuffer.flip();
-        colorsCount = colors.length;
+        colorsVbo = new VertexBufferObject<>(VertexBufferObject.BUFFER_TARGET_ARRAY_BUFFER);
+        colorsVbo.setBufferData(colorsBuffer);
         int colorLocation = program.getAttributeLocation(program.colorAttributeName);
 
         vao = new VertexArrayObject();
         vao.bind();
         {
-            verticesVbo = new VertexBufferObject(VertexBufferObject.BUFFER_TARGET_ARRAY_BUFFER);
             verticesVbo.bind();
             {
-                glBufferData(verticesVbo.getBufferTarget(), verticesBuffer, verticesVbo.getUsageHint());
+                verticesVbo.sendBufferData();
                 glVertexAttribPointer(positionLocation, 4, GL_FLOAT, false, 0, 0);
             }
             verticesVbo.unbind();
 
-            colorsVbo = new VertexBufferObject(VertexBufferObject.BUFFER_TARGET_ARRAY_BUFFER);
             colorsVbo.bind();
             {
-                glBufferData(colorsVbo.getBufferTarget(), colorsBuffer, colorsVbo.getUsageHint());
+                colorsVbo.sendBufferData();
                 glVertexAttribPointer(colorLocation, 4, GL_FLOAT, false, 0, 0);
             }
             verticesVbo.unbind();
@@ -128,15 +129,17 @@ public class Mesh extends Object3d {
         vao.unbind();
 
         if (geometry.isIndexed()) {
-            ShortBuffer indicesBuffer = BufferUtils.createShortBuffer(indices.length);
+            short[] indices = geometry.getIndices();
+            indicesCount = indices.length;
+            ShortBuffer indicesBuffer = BufferUtils.createShortBuffer(indicesCount);
             indicesBuffer.put(indices);
             indicesBuffer.flip();
-            indicesCount = indices.length;
+            indicesVbo = new VertexBufferObject<>(VertexBufferObject.BUFFER_TARGET_ELEMENT_ARRAY_BUFFER);
+            indicesVbo.setBufferData(indicesBuffer);
 
-            indicesVbo = new VertexBufferObject(VertexBufferObject.BUFFER_TARGET_ELEMENT_ARRAY_BUFFER);
             indicesVbo.bind();
             {
-                glBufferData(indicesVbo.getBufferTarget(), indicesBuffer, indicesVbo.getUsageHint());
+                indicesVbo.sendBufferData();
             }
             indicesVbo.unbind();
         } else {
@@ -194,10 +197,10 @@ public class Mesh extends Object3d {
     }
 
     private void deleteBuffers() {
-        verticesVbo.deleteBuffer();
-        colorsVbo.deleteBuffer();
+        verticesVbo.delete();
+        colorsVbo.delete();
         if (geometry.isIndexed()) {
-            indicesVbo.deleteBuffer();
+            indicesVbo.delete();
         }
     }
 
