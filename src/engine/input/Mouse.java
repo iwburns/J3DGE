@@ -15,7 +15,6 @@ public class Mouse {
     private GLFWCursorPosCallback cursorPosCallback;
     private GLFWMouseButtonCallback mouseButtonCallback;
 
-
     private HashMap<Integer, Integer> buttonStatuses;
 
     private double deltaX;
@@ -95,5 +94,11 @@ public class Mouse {
     public void resetDeltas() {
         deltaX = 0;
         deltaY = 0;
+    }
+
+    public void destroy() {
+        cursorPosCallback.release();
+        mouseButtonCallback.release();
+        buttonStatuses = null;
     }
 }

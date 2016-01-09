@@ -147,7 +147,7 @@ public class Engine {
         // Release window and window callbacks
         window.destroy();
         keyboard.destroy();
-        //TODO: add mouse here (and elsewhere)
+        mouse.destroy();
     }
 
     private void cleanUpGLFW() {
