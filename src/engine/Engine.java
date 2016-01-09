@@ -1,7 +1,7 @@
 package engine;
 
-import engine.keyboard.Keyboard;
-import engine.mouse.Mouse;
+import engine.input.Keyboard;
+import engine.input.Mouse;
 import engine.render.Renderer;
 import engine.window.Window;
 import org.lwjgl.Version;

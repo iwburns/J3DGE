@@ -1,4 +1,4 @@
-package engine.mouse;
+package engine.input;
 
 import org.lwjgl.glfw.GLFWCursorPosCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallback;

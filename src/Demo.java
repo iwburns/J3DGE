@@ -1,8 +1,8 @@
 import engine.Game;
 import engine.geometry.Geometry;
-import engine.keyboard.Keyboard;
+import engine.input.Keyboard;
 import engine.material.Material;
-import engine.mouse.Mouse;
+import engine.input.Mouse;
 import engine.object3d.Mesh;
 import engine.object3d.Object3d;
 import engine.object3d.camera.Camera;

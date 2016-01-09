@@ -1,4 +1,4 @@
-package engine.keyboard;
+package engine.input;
 
 import org.lwjgl.glfw.GLFWKeyCallback;
 
