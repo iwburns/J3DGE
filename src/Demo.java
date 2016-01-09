@@ -82,17 +82,17 @@ public class Demo extends Game {
     @Override
     public void update(float delta) {
         System.out.println("Time delta: " + delta);
-        mesh2.moveForward(0.1f);
-        object1.rotate(new Vector3f(1, 0, 0), 1f);
-        mesh1.rotate(new Vector3f(0, 0, 1), 1f);
-        mesh2.rotate(new Vector3f(0, 1, 0), 1f);
+        mesh2.moveForward(5f * delta);
+        object1.rotate(new Vector3f(1, 0, 0), 50 * delta);
+        mesh1.rotate(new Vector3f(0, 0, 1), 50 * delta);
+        mesh2.rotate(new Vector3f(0, 1, 0), 50 * delta);
 
-        updateCamera();
+        updateCamera(delta);
     }
 
-    private void updateCamera() {
+    private void updateCamera(float delta) {
         cameraMotion = new Vector3f();
-        float moveAmt = 0.1f;
+        float moveAmt = 5f * delta;
 
         if (keyboard.isKeyDown(GLFW_KEY_W)) {
             cameraMotion.add(new Vector3f(0, 0, -moveAmt));
