@@ -12,14 +12,9 @@ import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
-import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL15.glDeleteBuffers;
+import static org.lwjgl.opengl.GL15.glBufferData;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 public class Mesh extends Object3d {
 
@@ -42,10 +37,6 @@ public class Mesh extends Object3d {
         geometry = g;
         material = m;
         setupBuffers();
-    }
-
-    private void bindVao() {
-        glBindVertexArray(vao.getId());
     }
 
     public void disableVertexAttributes() {
@@ -116,25 +107,25 @@ public class Mesh extends Object3d {
         int colorLocation = program.getAttributeLocation(program.colorAttributeName);
 
         vao = new VertexArrayObject();
-        glBindVertexArray(vao.getId());
+        vao.bind();
         {
-            verticesVbo = new VertexBufferObject();
-            glBindBuffer(GL_ARRAY_BUFFER, verticesVbo.getId());
+            verticesVbo = new VertexBufferObject(VertexBufferObject.BUFFER_TARGET_ARRAY_BUFFER);
+            verticesVbo.bind();
             {
-                glBufferData(GL_ARRAY_BUFFER, verticesBuffer, GL_DYNAMIC_DRAW);
+                glBufferData(verticesVbo.getBufferTarget(), verticesBuffer, verticesVbo.getUsageHint());
                 glVertexAttribPointer(positionLocation, 4, GL_FLOAT, false, 0, 0);
             }
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            verticesVbo.unbind();
 
-            colorsVbo = new VertexBufferObject();
-            glBindBuffer(GL_ARRAY_BUFFER, colorsVbo.getId());
+            colorsVbo = new VertexBufferObject(VertexBufferObject.BUFFER_TARGET_ARRAY_BUFFER);
+            colorsVbo.bind();
             {
-                glBufferData(GL_ARRAY_BUFFER, colorsBuffer, GL_DYNAMIC_DRAW);
+                glBufferData(colorsVbo.getBufferTarget(), colorsBuffer, colorsVbo.getUsageHint());
                 glVertexAttribPointer(colorLocation, 4, GL_FLOAT, false, 0, 0);
             }
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            verticesVbo.unbind();
         }
-        glBindVertexArray(0);
+        vao.unbind();
 
         if (geometry.isIndexed()) {
             ShortBuffer indicesBuffer = BufferUtils.createShortBuffer(indices.length);
@@ -142,19 +133,15 @@ public class Mesh extends Object3d {
             indicesBuffer.flip();
             indicesCount = indices.length;
 
-            indicesVbo = new VertexBufferObject();
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, indicesVbo.getId());
+            indicesVbo = new VertexBufferObject(VertexBufferObject.BUFFER_TARGET_ELEMENT_ARRAY_BUFFER);
+            indicesVbo.bind();
             {
-                glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesBuffer, GL_DYNAMIC_DRAW);
+                glBufferData(indicesVbo.getBufferTarget(), indicesBuffer, indicesVbo.getUsageHint());
             }
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+            indicesVbo.unbind();
         } else {
             indicesCount = 0;
         }
-    }
-
-    private void unbindVao() {
-        glBindVertexArray(0);
     }
 
     public void updateColors() {
@@ -163,15 +150,15 @@ public class Mesh extends Object3d {
         tempBuffer.put(vertices);
         tempBuffer.flip();
 
-        glBindVertexArray(vao.getId());
+        vao.bind();
         {
-            glBindBuffer(GL_ARRAY_BUFFER, colorsVbo.getId());
+            colorsVbo.bind();
             {
-                glBufferData(GL_ARRAY_BUFFER, tempBuffer, GL_DYNAMIC_DRAW);
+                glBufferData(colorsVbo.getBufferTarget(), tempBuffer, colorsVbo.getUsageHint());
             }
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            colorsVbo.unbind();
         }
-        glBindVertexArray(0);
+        vao.unbind();
     }
 
     public void updateVertices() {
@@ -180,15 +167,15 @@ public class Mesh extends Object3d {
         tempBuffer.put(vertices);
         tempBuffer.flip();
 
-        glBindVertexArray(vao.getId());
+        vao.bind();
         {
-            glBindBuffer(GL_ARRAY_BUFFER, verticesVbo.getId());
+            verticesVbo.bind();
             {
-                glBufferData(GL_ARRAY_BUFFER, tempBuffer, GL_DYNAMIC_DRAW);
+                glBufferData(verticesVbo.getBufferTarget(), tempBuffer, verticesVbo.getUsageHint());
             }
-            glBindBuffer(GL_ARRAY_BUFFER, 0);
+            verticesVbo.unbind();
         }
-        glBindVertexArray(0);
+        vao.unbind();
     }
 
     public void destroy() {
@@ -197,22 +184,20 @@ public class Mesh extends Object3d {
     }
 
     private void deleteVao() {
-        bindVao();
+        vao.bind();
         {
             disableVertexAttributes();
             deleteBuffers();
         }
-        unbindVao();
-        glDeleteVertexArrays(vao.getId());
+        vao.unbind();
+        vao.delete();
     }
 
     private void deleteBuffers() {
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glDeleteBuffers(verticesVbo.getId());
-        glDeleteBuffers(colorsVbo.getId());
+        verticesVbo.deleteBuffer();
+        colorsVbo.deleteBuffer();
         if (geometry.isIndexed()) {
-            glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-            glDeleteBuffers(indicesVbo.getId());
+            indicesVbo.deleteBuffer();
         }
     }
 
