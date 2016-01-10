@@ -20,14 +20,9 @@ public class Mesh extends Object3d {
 
     //TODO: check destroy.
 
-    Geometry geometry;
-    Material material;
-
+    private Geometry geometry;
+    private Material material;
     private VertexArrayObject vao;
-
-    private FloatVertexBufferObject verticesVbo;
-    private FloatVertexBufferObject colorsVbo;
-    private ShortVertexBufferObject indicesVbo;
 
     public Mesh(Geometry g, Material m) {
         geometry = g;
@@ -60,7 +55,7 @@ public class Mesh extends Object3d {
         FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(vertices.length);
         verticesBuffer.put(vertices);
         verticesBuffer.flip();
-        verticesVbo = new FloatVertexBufferObject(verticesBuffer, VertexBufferObject.BUFFER_TARGET_ARRAY_BUFFER);
+        FloatVertexBufferObject verticesVbo = new FloatVertexBufferObject(verticesBuffer, VertexBufferObject.BUFFER_TARGET_ARRAY_BUFFER);
         int positionLocation = program.getAttributeLocation(program.positionAttributeName);
         verticesVbo.addVertexAttributePointer(new VertexAttributePointer(
                 positionLocation,
@@ -71,7 +66,7 @@ public class Mesh extends Object3d {
         FloatBuffer colorsBuffer = BufferUtils.createFloatBuffer(colors.length);
         colorsBuffer.put(colors);
         colorsBuffer.flip();
-        colorsVbo = new FloatVertexBufferObject(colorsBuffer, VertexBufferObject.BUFFER_TARGET_ARRAY_BUFFER);
+        FloatVertexBufferObject colorsVbo = new FloatVertexBufferObject(colorsBuffer, VertexBufferObject.BUFFER_TARGET_ARRAY_BUFFER);
         int colorLocation = program.getAttributeLocation(program.colorAttributeName);
         colorsVbo.addVertexAttributePointer(new VertexAttributePointer(
                 colorLocation,
@@ -90,7 +85,7 @@ public class Mesh extends Object3d {
             ShortBuffer indicesBuffer = BufferUtils.createShortBuffer(indices.length);
             indicesBuffer.put(indices);
             indicesBuffer.flip();
-            indicesVbo = new ShortVertexBufferObject(indicesBuffer, VertexBufferObject.BUFFER_TARGET_ELEMENT_ARRAY_BUFFER);
+            ShortVertexBufferObject indicesVbo = new ShortVertexBufferObject(indicesBuffer, VertexBufferObject.BUFFER_TARGET_ELEMENT_ARRAY_BUFFER);
             vao.setIndicesVbo(indicesVbo);
         }
 
@@ -98,16 +93,16 @@ public class Mesh extends Object3d {
     }
 
     public void updateColors() {
-        float[] vertices = geometry.getColors();
-        FloatBuffer tempBuffer = BufferUtils.createFloatBuffer(vertices.length);
-        tempBuffer.put(vertices);
+        float[] colors = geometry.getColors();
+        FloatBuffer tempBuffer = BufferUtils.createFloatBuffer(colors.length);
+        tempBuffer.put(colors);
         tempBuffer.flip();
 
-        colorsVbo.setBufferData(tempBuffer);
+        vao.getColorsVbo().setBufferData(tempBuffer);
 
         vao.bind();
         {
-            colorsVbo.sendBufferDataAutoBind();
+            vao.getColorsVbo().sendBufferDataAutoBind();
         }
         vao.unbind();
     }
@@ -117,11 +112,12 @@ public class Mesh extends Object3d {
         FloatBuffer tempBuffer = BufferUtils.createFloatBuffer(vertices.length);
         tempBuffer.put(vertices);
         tempBuffer.flip();
-        verticesVbo.setBufferData(tempBuffer);
+
+        vao.getVerticesVbo().setBufferData(tempBuffer);
 
         vao.bind();
         {
-            verticesVbo.sendBufferDataAutoBind();
+            vao.getVerticesVbo().sendBufferDataAutoBind();
         }
         vao.unbind();
     }
@@ -146,10 +142,10 @@ public class Mesh extends Object3d {
     }
 
     private void deleteBuffers() {
-        verticesVbo.delete();
-        colorsVbo.delete();
+        vao.getVerticesVbo().delete();
+        vao.getColorsVbo().delete();
         if (geometry.isIndexed()) {
-            indicesVbo.delete();
+            vao.getIndicesVbo().delete();
         }
     }
 
