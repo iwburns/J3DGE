@@ -57,35 +57,43 @@ public abstract class VertexBufferObject {
         vertexAttributePointers.remove(vertexAttributePointer);
     }
 
-    public void sendVertexAttributes(boolean autoBind) {
-        if (autoBind) {
-            bind();
-        }
-        vertexAttributePointers.forEach(vertexAttributePointer -> {
-            glVertexAttribPointer(
-                    vertexAttributePointer.getLocation(),
-                    vertexAttributePointer.getSize(),
-                    vertexAttributePointer.getType(),
-                    vertexAttributePointer.isNormalized(),
-                    vertexAttributePointer.getStride(),
-                    vertexAttributePointer.getOffset()
-            );
-        });
-        if (autoBind) {
-            unbind();
-        }
-    }
-
-    public void sendAllData() {
+    public void sendBufferDataAutoBind() {
         bind();
-        {
-            sendBufferData(false);
-            sendVertexAttributes(false);
-        }
+        sendBufferData();
         unbind();
     }
 
-    public abstract void sendBufferData(boolean autoBind);
+    public abstract void sendBufferData();
+
+    public void sendVertexAttributesAutoBind() {
+        bind();
+        sendVertexAttributes();
+        unbind();
+    }
+
+    public void sendVertexAttributes() {
+        vertexAttributePointers.forEach(pointer -> {
+            glVertexAttribPointer(
+                    pointer.getLocation(),
+                    pointer.getSize(),
+                    pointer.getType(),
+                    pointer.isNormalized(),
+                    pointer.getStride(),
+                    pointer.getOffset()
+            );
+        });
+    }
+
+    public void sendAllDataAutoBind() {
+        bind();
+        sendAllData();
+        unbind();
+    }
+
+    public void sendAllData() {
+        sendBufferData();
+        sendVertexAttributes();
+    }
 
     public abstract Buffer getBufferData();
 

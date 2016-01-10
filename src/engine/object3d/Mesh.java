@@ -123,8 +123,8 @@ public class Mesh extends Object3d {
         vao = new VertexArrayObject();
         vao.bind();
         {
-            verticesVbo.sendAllData();
-            colorsVbo.sendAllData();
+            verticesVbo.sendAllDataAutoBind();
+            colorsVbo.sendAllDataAutoBind();
         }
         vao.unbind();
 
@@ -136,7 +136,7 @@ public class Mesh extends Object3d {
             indicesBuffer.flip();
             indicesVbo = new ShortVertexBufferObject(VertexBufferObject.BUFFER_TARGET_ELEMENT_ARRAY_BUFFER);
             indicesVbo.setBufferData(indicesBuffer);
-            indicesVbo.sendBufferData(true);
+            indicesVbo.sendBufferDataAutoBind();
         } else {
             indicesCount = 0;
         }
@@ -152,7 +152,7 @@ public class Mesh extends Object3d {
 
         vao.bind();
         {
-            colorsVbo.sendBufferData(true);
+            colorsVbo.sendBufferDataAutoBind();
         }
         vao.unbind();
     }
@@ -166,7 +166,7 @@ public class Mesh extends Object3d {
 
         vao.bind();
         {
-            verticesVbo.sendBufferData(true);
+            verticesVbo.sendBufferDataAutoBind();
         }
         vao.unbind();
     }
