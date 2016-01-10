@@ -125,7 +125,6 @@ public class Mesh extends Object3d {
                         , 0
                         , 0
                 );
-                glVertexAttribPointer(positionLocation, 4, GL_FLOAT, false, 0, 0);
             }
             verticesVbo.unbind();
 
