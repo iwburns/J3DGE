@@ -117,6 +117,14 @@ public class Mesh extends Object3d {
             verticesVbo.bind();
             {
                 verticesVbo.sendBufferData();
+                verticesVbo.addAttributePointer(
+                          positionLocation
+                        , 4
+                        , VertexBufferObject.DATA_TYPE_FLOAT
+                        , false
+                        , 0
+                        , 0
+                );
                 glVertexAttribPointer(positionLocation, 4, GL_FLOAT, false, 0, 0);
             }
             verticesVbo.unbind();
@@ -124,7 +132,14 @@ public class Mesh extends Object3d {
             colorsVbo.bind();
             {
                 colorsVbo.sendBufferData();
-                glVertexAttribPointer(colorLocation, 4, GL_FLOAT, false, 0, 0);
+                verticesVbo.addAttributePointer(
+                          colorLocation
+                        , 4
+                        , VertexBufferObject.DATA_TYPE_FLOAT
+                        , false
+                        , 0
+                        , 0
+                );
             }
             verticesVbo.unbind();
         }
@@ -155,11 +170,13 @@ public class Mesh extends Object3d {
         tempBuffer.put(vertices);
         tempBuffer.flip();
 
+        colorsVbo.setBufferData(tempBuffer);
+
         vao.bind();
         {
             colorsVbo.bind();
             {
-                glBufferData(colorsVbo.getBufferTarget(), tempBuffer, colorsVbo.getUsageHint());
+                colorsVbo.sendBufferData();
             }
             colorsVbo.unbind();
         }
@@ -171,12 +188,13 @@ public class Mesh extends Object3d {
         FloatBuffer tempBuffer = BufferUtils.createFloatBuffer(vertices.length);
         tempBuffer.put(vertices);
         tempBuffer.flip();
+        verticesVbo.setBufferData(tempBuffer);
 
         vao.bind();
         {
             verticesVbo.bind();
             {
-                glBufferData(verticesVbo.getBufferTarget(), tempBuffer, verticesVbo.getUsageHint());
+                verticesVbo.sendBufferData();
             }
             verticesVbo.unbind();
         }

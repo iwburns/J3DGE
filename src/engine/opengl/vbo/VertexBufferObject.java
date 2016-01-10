@@ -2,10 +2,15 @@ package engine.opengl.vbo;
 
 import java.nio.Buffer;
 
+import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL15.*;
+import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 
 public abstract class VertexBufferObject {
-    
+
+    //todo: add other dataType options here.
+    public static int DATA_TYPE_FLOAT = GL_FLOAT;
+
     public static int BUFFER_TARGET_ARRAY_BUFFER = GL_ARRAY_BUFFER;
     public static int BUFFER_TARGET_ELEMENT_ARRAY_BUFFER = GL_ELEMENT_ARRAY_BUFFER;
 
@@ -50,4 +55,9 @@ public abstract class VertexBufferObject {
     public abstract Buffer getBufferData();
 
     public abstract void setBufferData(Buffer b);
+
+    public void addAttributePointer(int attributeIndex, int size, int dataType, boolean normalized, int stride, long offset) {
+        //TODO: make a class to manage these.
+        glVertexAttribPointer(attributeIndex, size, dataType, normalized, stride, offset);
+    }
 }
