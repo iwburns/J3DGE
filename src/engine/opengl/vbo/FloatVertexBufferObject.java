@@ -9,12 +9,13 @@ public class FloatVertexBufferObject extends VertexBufferObject {
 
     private FloatBuffer bufferData;
 
-    public FloatVertexBufferObject(int bufferTarget) {
-        this(bufferTarget, USAGE_HINT_STATIC_DRAW);
+    public FloatVertexBufferObject(FloatBuffer bufferData, int bufferTarget) {
+        this(bufferData, bufferTarget, USAGE_HINT_STATIC_DRAW);
     }
 
-    public FloatVertexBufferObject(int bufferTarget, int usageHint) {
+    public FloatVertexBufferObject(FloatBuffer bufferData, int bufferTarget, int usageHint) {
         id = glGenBuffers();
+        this.bufferData = bufferData;
         this.bufferTarget = bufferTarget;
         this.usageHint = usageHint;
     }

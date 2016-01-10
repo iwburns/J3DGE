@@ -97,8 +97,7 @@ public class Mesh extends Object3d {
         FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(verticesCount);
         verticesBuffer.put(vertices);
         verticesBuffer.flip();
-        verticesVbo = new FloatVertexBufferObject(VertexBufferObject.BUFFER_TARGET_ARRAY_BUFFER);
-        verticesVbo.setBufferData(verticesBuffer);
+        verticesVbo = new FloatVertexBufferObject(verticesBuffer, VertexBufferObject.BUFFER_TARGET_ARRAY_BUFFER);
         int positionLocation = program.getAttributeLocation(program.positionAttributeName);
         verticesVbo.addVertexAttributePointer(new VertexAttributePointer(
                 positionLocation,
@@ -110,8 +109,7 @@ public class Mesh extends Object3d {
         FloatBuffer colorsBuffer = BufferUtils.createFloatBuffer(colorsCount);
         colorsBuffer.put(colors);
         colorsBuffer.flip();
-        colorsVbo = new FloatVertexBufferObject(VertexBufferObject.BUFFER_TARGET_ARRAY_BUFFER);
-        colorsVbo.setBufferData(colorsBuffer);
+        colorsVbo = new FloatVertexBufferObject(colorsBuffer, VertexBufferObject.BUFFER_TARGET_ARRAY_BUFFER);
         int colorLocation = program.getAttributeLocation(program.colorAttributeName);
         colorsVbo.addVertexAttributePointer(new VertexAttributePointer(
                 colorLocation,
@@ -120,13 +118,10 @@ public class Mesh extends Object3d {
         ));
 
 
-        vao = new VertexArrayObject();
-        vao.bind();
-        {
-            verticesVbo.sendAllDataAutoBind();
-            colorsVbo.sendAllDataAutoBind();
-        }
-        vao.unbind();
+        vao = new VertexArrayObject(geometry.isIndexed());
+
+        vao.addVertexBufferObject(verticesVbo);
+        vao.addVertexBufferObject(colorsVbo);
 
         if (geometry.isIndexed()) {
             short[] indices = geometry.getIndices();
@@ -134,12 +129,13 @@ public class Mesh extends Object3d {
             ShortBuffer indicesBuffer = BufferUtils.createShortBuffer(indicesCount);
             indicesBuffer.put(indices);
             indicesBuffer.flip();
-            indicesVbo = new ShortVertexBufferObject(VertexBufferObject.BUFFER_TARGET_ELEMENT_ARRAY_BUFFER);
-            indicesVbo.setBufferData(indicesBuffer);
-            indicesVbo.sendBufferDataAutoBind();
+            indicesVbo = new ShortVertexBufferObject(indicesBuffer, VertexBufferObject.BUFFER_TARGET_ELEMENT_ARRAY_BUFFER);
+            vao.setIndicesVbo(indicesVbo);
         } else {
             indicesCount = 0;
         }
+
+        vao.sendVboDataAutoBind();
     }
 
     public void updateColors() {
