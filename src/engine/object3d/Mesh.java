@@ -73,31 +73,25 @@ public class Mesh extends Object3d {
     }
 
     public void updateColors() {
-        float[] colors = geometry.getColors();
-        FloatBuffer tempBuffer = BufferUtils.createFloatBuffer(colors.length);
-        tempBuffer.put(colors);
-        tempBuffer.flip();
-
-        vao.getColorsVbo().setBufferData(tempBuffer);
+        VertexBufferObject colorsVbo = vao.getColorsVbo();
+        FloatBuffer buffer = setupFloatBuffer(geometry.getColors());
+        colorsVbo.setBufferData(buffer);
 
         vao.bind();
         {
-            vao.getColorsVbo().sendDataAutoBind();
+            colorsVbo.sendDataAutoBind();
         }
         vao.unbind();
     }
 
     public void updateVertices() {
-        float[] vertices = geometry.getVertices();
-        FloatBuffer tempBuffer = BufferUtils.createFloatBuffer(vertices.length);
-        tempBuffer.put(vertices);
-        tempBuffer.flip();
-
-        vao.getVerticesVbo().setBufferData(tempBuffer);
+        VertexBufferObject verticesVbo = vao.getVerticesVbo();
+        FloatBuffer buffer = setupFloatBuffer(geometry.getVertices());
+        verticesVbo.setBufferData(buffer);
 
         vao.bind();
         {
-            vao.getVerticesVbo().sendDataAutoBind();
+            verticesVbo.sendDataAutoBind();
         }
         vao.unbind();
     }
