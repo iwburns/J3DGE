@@ -61,7 +61,7 @@ public class Renderer {
                 glDrawElements(mesh.getGeometry().getDrawMode(), mesh.getVao().getIndicesVbo().getSize(), GL_UNSIGNED_SHORT, 0);
                 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
             } else {
-                glDrawArrays(mesh.getGeometry().getDrawMode(), 0, mesh.getVao().getVertexBufferObjects().get(0).getSize());
+                glDrawArrays(mesh.getGeometry().getDrawMode(), 0, mesh.getVao().getVerticesVbo().getSize());
             }
 
             disableVertexAttributes();

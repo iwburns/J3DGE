@@ -8,6 +8,8 @@ import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 
 public abstract class VertexBufferObject {
 
+    //todo: possibly split this up into a VertexBufferObject for per-vertex style data and IndexBufferObject for indexing data
+
     public static int BUFFER_TARGET_ARRAY_BUFFER = GL_ARRAY_BUFFER;
     public static int BUFFER_TARGET_ELEMENT_ARRAY_BUFFER = GL_ELEMENT_ARRAY_BUFFER;
 

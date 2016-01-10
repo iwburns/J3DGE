@@ -82,8 +82,8 @@ public class Mesh extends Object3d {
 
         vao = new VertexArrayObject(geometry.isIndexed());
 
-        vao.addVertexBufferObject(verticesVbo);
-        vao.addVertexBufferObject(colorsVbo);
+        vao.setVerticesVbo(verticesVbo);
+        vao.setColorsVbo(colorsVbo);
 
         if (geometry.isIndexed()) {
             short[] indices = geometry.getIndices();
