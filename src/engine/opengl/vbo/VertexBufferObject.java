@@ -63,8 +63,6 @@ public abstract class VertexBufferObject {
         unbind();
     }
 
-    public abstract void sendBufferData();
-
     public void sendVertexAttributesAutoBind() {
         bind();
         sendVertexAttributes();
@@ -95,8 +93,12 @@ public abstract class VertexBufferObject {
         sendVertexAttributes();
     }
 
+    public abstract void sendBufferData();
+
     public abstract Buffer getBufferData();
 
     public abstract void setBufferData(Buffer b);
+
+    public abstract int getSize();
 
 }

@@ -55,13 +55,13 @@ public class Renderer {
             bindVao(mesh);
             enableVertexAttributes();
 
-            if (mesh.isIndexed()) {
+            if (mesh.getVao().isIndexed()) {
                 //todo: move these into the mesh if possible to clean this up a bit.
-                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.getIndicesVboID());
-                glDrawElements(mesh.getGeometry().getDrawMode(), mesh.getIndicesCount(), GL_UNSIGNED_SHORT, 0);
+                glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, mesh.getVao().getIndicesVbo().getId());
+                glDrawElements(mesh.getGeometry().getDrawMode(), mesh.getVao().getIndicesVbo().getSize(), GL_UNSIGNED_SHORT, 0);
                 glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
             } else {
-                glDrawArrays(mesh.getGeometry().getDrawMode(), 0, mesh.getVerticesCount());
+                glDrawArrays(mesh.getGeometry().getDrawMode(), 0, mesh.getVao().getVertexBufferObjects().get(0).getSize());
             }
 
             disableVertexAttributes();
@@ -74,7 +74,7 @@ public class Renderer {
     }
 
     private void bindVao(Mesh mesh) {
-        glBindVertexArray(mesh.getVaoID());
+        glBindVertexArray(mesh.getVao().getId());
     }
 
     private void unbindVao() {

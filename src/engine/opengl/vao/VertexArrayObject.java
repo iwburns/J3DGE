@@ -45,6 +45,10 @@ public class VertexArrayObject {
         vertexBufferObjects.remove(vbo);
     }
 
+    public ArrayList<VertexBufferObject> getVertexBufferObjects() {
+        return vertexBufferObjects;
+    }
+
     public void sendVboDataAutoBind() {
         bind();
         sendVboData();
@@ -65,5 +69,13 @@ public class VertexArrayObject {
         }
 
         indicesVbo = vbo;
+    }
+
+    public VertexBufferObject getIndicesVbo() {
+        return indicesVbo;
+    }
+
+    public boolean isIndexed() {
+        return indexed;
     }
 }

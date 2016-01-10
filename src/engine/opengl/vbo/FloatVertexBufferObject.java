@@ -34,4 +34,9 @@ public class FloatVertexBufferObject extends VertexBufferObject {
     public void setBufferData(Buffer b) {
         bufferData = (FloatBuffer) b;
     }
+
+    @Override
+    public int getSize() {
+        return bufferData.capacity();
+    }
 }

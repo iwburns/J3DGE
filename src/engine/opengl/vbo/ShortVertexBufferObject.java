@@ -35,4 +35,9 @@ public class ShortVertexBufferObject extends VertexBufferObject {
     public void setBufferData(Buffer b) {
         bufferData = (ShortBuffer) b;
     }
+
+    @Override
+    public int getSize() {
+        return bufferData.capacity();
+    }
 }

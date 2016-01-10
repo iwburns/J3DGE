@@ -29,10 +29,6 @@ public class Mesh extends Object3d {
     private FloatVertexBufferObject colorsVbo;
     private ShortVertexBufferObject indicesVbo;
 
-    private int verticesCount;
-    private int colorsCount;
-    private int indicesCount;
-
     public Mesh(Geometry g, Material m) {
         geometry = g;
         material = m;
@@ -43,24 +39,8 @@ public class Mesh extends Object3d {
         material.getProgram().getAttributeLocations().forEach(location -> glDisableVertexAttribArray(location));
     }
 
-    public int getColorsCount() {
-        return colorsCount;
-    }
-
-    public int getColorsVboID() {
-        return colorsVbo.getId();
-    }
-
     public Geometry getGeometry() {
         return geometry;
-    }
-
-    public int getIndicesCount() {
-        return indicesCount;
-    }
-
-    public int getIndicesVboID() {
-        return indicesVbo.getId();
     }
 
     public Material getMaterial() {
@@ -71,30 +51,13 @@ public class Mesh extends Object3d {
         return getLocalToWorld();
     }
 
-    public int getVaoID() {
-        return vao.getId();
-    }
-
-    public int getVerticesCount() {
-        return verticesCount;
-    }
-
-    public int getVerticesVboID() {
-        return verticesVbo.getId();
-    }
-
-    public boolean isIndexed() {
-        return geometry.isIndexed();
-    }
-
     private void setupBuffers() {
         float[] vertices = geometry.getVertices();
         float[] colors = geometry.getColors();
 
         ShaderProgram program = material.getProgram();
 
-        verticesCount = vertices.length;
-        FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(verticesCount);
+        FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(vertices.length);
         verticesBuffer.put(vertices);
         verticesBuffer.flip();
         verticesVbo = new FloatVertexBufferObject(verticesBuffer, VertexBufferObject.BUFFER_TARGET_ARRAY_BUFFER);
@@ -105,8 +68,7 @@ public class Mesh extends Object3d {
                 VertexAttributePointer.DATA_TYPE_FLOAT
         ));
 
-        colorsCount = colors.length;
-        FloatBuffer colorsBuffer = BufferUtils.createFloatBuffer(colorsCount);
+        FloatBuffer colorsBuffer = BufferUtils.createFloatBuffer(colors.length);
         colorsBuffer.put(colors);
         colorsBuffer.flip();
         colorsVbo = new FloatVertexBufferObject(colorsBuffer, VertexBufferObject.BUFFER_TARGET_ARRAY_BUFFER);
@@ -125,14 +87,11 @@ public class Mesh extends Object3d {
 
         if (geometry.isIndexed()) {
             short[] indices = geometry.getIndices();
-            indicesCount = indices.length;
-            ShortBuffer indicesBuffer = BufferUtils.createShortBuffer(indicesCount);
+            ShortBuffer indicesBuffer = BufferUtils.createShortBuffer(indices.length);
             indicesBuffer.put(indices);
             indicesBuffer.flip();
             indicesVbo = new ShortVertexBufferObject(indicesBuffer, VertexBufferObject.BUFFER_TARGET_ELEMENT_ARRAY_BUFFER);
             vao.setIndicesVbo(indicesVbo);
-        } else {
-            indicesCount = 0;
         }
 
         vao.sendVboDataAutoBind();
@@ -165,6 +124,10 @@ public class Mesh extends Object3d {
             verticesVbo.sendBufferDataAutoBind();
         }
         vao.unbind();
+    }
+
+    public VertexArrayObject getVao() {
+        return vao;
     }
 
     public void destroy() {
