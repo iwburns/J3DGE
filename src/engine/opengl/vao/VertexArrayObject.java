@@ -1,6 +1,7 @@
 package engine.opengl.vao;
 
-import engine.opengl.vbo.VertexBufferObject;
+import engine.opengl.vbo.FloatVertexBufferObject;
+import engine.opengl.vbo.ShortIndexBufferObject;
 
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
@@ -10,9 +11,9 @@ public class VertexArrayObject {
 
     private final int id;
     private final boolean indexed;
-    private VertexBufferObject verticesVbo;
-    private VertexBufferObject colorsVbo;
-    private VertexBufferObject indicesVbo;
+    private FloatVertexBufferObject verticesVbo;
+    private FloatVertexBufferObject colorsVbo;
+    private ShortIndexBufferObject indicesVbo;
 
     public VertexArrayObject(boolean indexed) {
         id = glGenVertexArrays();
@@ -42,34 +43,34 @@ public class VertexArrayObject {
     }
 
     public void sendVboData() {
-        verticesVbo.sendAllDataAutoBind();
-        colorsVbo.sendAllDataAutoBind();
+        verticesVbo.sendDataAutoBind();
+        colorsVbo.sendDataAutoBind();
         if (indexed) {
-            indicesVbo.sendAllDataAutoBind();
+            indicesVbo.sendDataAutoBind();
         }
     }
 
-    public VertexBufferObject getVerticesVbo() {
+    public FloatVertexBufferObject getVerticesVbo() {
         return verticesVbo;
     }
 
-    public void setVerticesVbo(VertexBufferObject verticesVbo) {
+    public void setVerticesVbo(FloatVertexBufferObject verticesVbo) {
         this.verticesVbo = verticesVbo;
     }
 
-    public VertexBufferObject getColorsVbo() {
+    public FloatVertexBufferObject getColorsVbo() {
         return colorsVbo;
     }
 
-    public void setColorsVbo(VertexBufferObject colorsVbo) {
+    public void setColorsVbo(FloatVertexBufferObject colorsVbo) {
         this.colorsVbo = colorsVbo;
     }
 
-    public VertexBufferObject getIndicesVbo() {
+    public ShortIndexBufferObject getIndicesVbo() {
         return indicesVbo;
     }
 
-    public void setIndicesVbo(VertexBufferObject vbo) {
+    public void setIndicesVbo(ShortIndexBufferObject vbo) {
         if (!indexed) {
             System.out.println("ERROR: This VertexArrayObject is not indexed and cannot have an indicesVbo added to it.");
             return;

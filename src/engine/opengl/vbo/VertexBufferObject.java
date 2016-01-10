@@ -6,49 +6,36 @@ import java.util.ArrayList;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 
-public abstract class VertexBufferObject {
-
-    //todo: possibly split this up into a VertexBufferObject for per-vertex style data and IndexBufferObject for indexing data
-
-    public static int BUFFER_TARGET_ARRAY_BUFFER = GL_ARRAY_BUFFER;
-    public static int BUFFER_TARGET_ELEMENT_ARRAY_BUFFER = GL_ELEMENT_ARRAY_BUFFER;
-
-    public static int USAGE_HINT_STATIC_DRAW = GL_STATIC_DRAW;
-    public static int USAGE_HINT_DYNAMIC_DRAW = GL_DYNAMIC_DRAW;
-
-    protected int id;
-    protected int bufferTarget;
-    protected int usageHint;
+public abstract class VertexBufferObject extends BufferObject {
 
     protected ArrayList<VertexAttributePointer> vertexAttributePointers = new ArrayList<>();
 
-    public void bind() {
-        glBindBuffer(bufferTarget, id);
+    protected VertexBufferObject() {
+        this(BUFFER_TARGET_ARRAY_BUFFER, USAGE_HINT_STATIC_DRAW);
     }
 
-    public void unbind() {
-        glBindBuffer(bufferTarget, 0);
+    protected VertexBufferObject(int bufferTarget, int usageHint) {
+        super(bufferTarget, usageHint);
     }
 
-    public void delete() {
+    public abstract Buffer getBufferData();
+
+    public abstract void setBufferData(Buffer b);
+
+    public abstract int getSize();
+
+    public abstract void sendBufferData();
+
+    public void sendBufferDataAutoBind() {
+        bind();
+        sendBufferData();
         unbind();
-        glDeleteBuffers(id);
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public int getBufferTarget() {
-        return bufferTarget;
-    }
-
-    public int getUsageHint() {
-        return usageHint;
-    }
-
-    public void setUsageHint(int usageHint) {
-        this.usageHint = usageHint;
+    @Override
+    public void sendData() {
+        sendBufferData();
+        sendVertexAttributes();
     }
 
     public void addVertexAttributePointer(VertexAttributePointer vertexAttributePointer) {
@@ -57,12 +44,6 @@ public abstract class VertexBufferObject {
 
     public void removeVertexAttributePointer(VertexAttributePointer vertexAttributePointer) {
         vertexAttributePointers.remove(vertexAttributePointer);
-    }
-
-    public void sendBufferDataAutoBind() {
-        bind();
-        sendBufferData();
-        unbind();
     }
 
     public void sendVertexAttributesAutoBind() {
@@ -83,24 +64,5 @@ public abstract class VertexBufferObject {
             );
         });
     }
-
-    public void sendAllDataAutoBind() {
-        bind();
-        sendAllData();
-        unbind();
-    }
-
-    public void sendAllData() {
-        sendBufferData();
-        sendVertexAttributes();
-    }
-
-    public abstract void sendBufferData();
-
-    public abstract Buffer getBufferData();
-
-    public abstract void setBufferData(Buffer b);
-
-    public abstract int getSize();
 
 }

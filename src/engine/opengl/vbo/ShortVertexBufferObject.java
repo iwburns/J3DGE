@@ -4,21 +4,14 @@ import java.nio.Buffer;
 import java.nio.ShortBuffer;
 
 import static org.lwjgl.opengl.GL15.glBufferData;
-import static org.lwjgl.opengl.GL15.glGenBuffers;
 
 public class ShortVertexBufferObject extends VertexBufferObject {
 
     private ShortBuffer bufferData;
 
-    public ShortVertexBufferObject(ShortBuffer bufferData, int bufferTarget) {
-        this(bufferData, bufferTarget, USAGE_HINT_STATIC_DRAW);
-    }
-
-    public ShortVertexBufferObject(ShortBuffer bufferData, int bufferTarget, int usageHint) {
-        id = glGenBuffers();
+    public ShortVertexBufferObject(ShortBuffer bufferData) {
+        super();
         this.bufferData = bufferData;
-        this.bufferTarget = bufferTarget;
-        this.usageHint = usageHint;
     }
 
     @Override

@@ -3,10 +3,7 @@ package engine.object3d;
 import engine.geometry.Geometry;
 import engine.material.Material;
 import engine.opengl.vao.VertexArrayObject;
-import engine.opengl.vbo.FloatVertexBufferObject;
-import engine.opengl.vbo.ShortVertexBufferObject;
-import engine.opengl.vbo.VertexAttributePointer;
-import engine.opengl.vbo.VertexBufferObject;
+import engine.opengl.vbo.*;
 import engine.shader.ShaderProgram;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
@@ -55,7 +52,7 @@ public class Mesh extends Object3d {
         FloatBuffer verticesBuffer = BufferUtils.createFloatBuffer(vertices.length);
         verticesBuffer.put(vertices);
         verticesBuffer.flip();
-        FloatVertexBufferObject verticesVbo = new FloatVertexBufferObject(verticesBuffer, VertexBufferObject.BUFFER_TARGET_ARRAY_BUFFER);
+        FloatVertexBufferObject verticesVbo = new FloatVertexBufferObject(verticesBuffer);
         int positionLocation = program.getAttributeLocation(program.positionAttributeName);
         verticesVbo.addVertexAttributePointer(new VertexAttributePointer(
                 positionLocation,
@@ -66,7 +63,7 @@ public class Mesh extends Object3d {
         FloatBuffer colorsBuffer = BufferUtils.createFloatBuffer(colors.length);
         colorsBuffer.put(colors);
         colorsBuffer.flip();
-        FloatVertexBufferObject colorsVbo = new FloatVertexBufferObject(colorsBuffer, VertexBufferObject.BUFFER_TARGET_ARRAY_BUFFER);
+        FloatVertexBufferObject colorsVbo = new FloatVertexBufferObject(colorsBuffer);
         int colorLocation = program.getAttributeLocation(program.colorAttributeName);
         colorsVbo.addVertexAttributePointer(new VertexAttributePointer(
                 colorLocation,
@@ -85,7 +82,7 @@ public class Mesh extends Object3d {
             ShortBuffer indicesBuffer = BufferUtils.createShortBuffer(indices.length);
             indicesBuffer.put(indices);
             indicesBuffer.flip();
-            ShortVertexBufferObject indicesVbo = new ShortVertexBufferObject(indicesBuffer, VertexBufferObject.BUFFER_TARGET_ELEMENT_ARRAY_BUFFER);
+            ShortIndexBufferObject indicesVbo = new ShortIndexBufferObject(indicesBuffer);
             vao.setIndicesVbo(indicesVbo);
         }
 
@@ -102,7 +99,7 @@ public class Mesh extends Object3d {
 
         vao.bind();
         {
-            vao.getColorsVbo().sendBufferDataAutoBind();
+            vao.getColorsVbo().sendDataAutoBind();
         }
         vao.unbind();
     }
@@ -117,7 +114,7 @@ public class Mesh extends Object3d {
 
         vao.bind();
         {
-            vao.getVerticesVbo().sendBufferDataAutoBind();
+            vao.getVerticesVbo().sendDataAutoBind();
         }
         vao.unbind();
     }

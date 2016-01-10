@@ -1,15 +1,15 @@
 package engine.opengl.vbo;
 
 import java.nio.Buffer;
-import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
 
 import static org.lwjgl.opengl.GL15.glBufferData;
 
-public class FloatVertexBufferObject extends VertexBufferObject {
+public class ShortIndexBufferObject extends IndexBufferObject {
 
-    private FloatBuffer bufferData;
+    ShortBuffer bufferData;
 
-    public FloatVertexBufferObject(FloatBuffer bufferData) {
+    public ShortIndexBufferObject(ShortBuffer bufferData) {
         super();
         this.bufferData = bufferData;
     }
@@ -21,7 +21,7 @@ public class FloatVertexBufferObject extends VertexBufferObject {
 
     @Override
     public void setBufferData(Buffer b) {
-        bufferData = (FloatBuffer) b;
+        bufferData = (ShortBuffer) b;
     }
 
     @Override
