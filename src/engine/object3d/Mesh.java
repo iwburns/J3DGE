@@ -3,10 +3,10 @@ package engine.object3d;
 import engine.geometry.Geometry;
 import engine.material.Material;
 import engine.opengl.vao.VertexArrayObject;
-import engine.opengl.vbo.VertexAttributePointer;
-import engine.opengl.vbo.VertexBufferObject;
 import engine.opengl.vbo.FloatVertexBufferObject;
 import engine.opengl.vbo.ShortVertexBufferObject;
+import engine.opengl.vbo.VertexAttributePointer;
+import engine.opengl.vbo.VertexBufferObject;
 import engine.shader.ShaderProgram;
 import org.joml.Matrix4f;
 import org.lwjgl.BufferUtils;
@@ -14,10 +14,7 @@ import org.lwjgl.BufferUtils;
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
-import static org.lwjgl.opengl.GL11.GL_FLOAT;
-import static org.lwjgl.opengl.GL15.glBufferData;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
-import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 
 public class Mesh extends Object3d {
 
@@ -139,12 +136,7 @@ public class Mesh extends Object3d {
             indicesBuffer.flip();
             indicesVbo = new ShortVertexBufferObject(VertexBufferObject.BUFFER_TARGET_ELEMENT_ARRAY_BUFFER);
             indicesVbo.setBufferData(indicesBuffer);
-
-            indicesVbo.bind();
-            {
-                indicesVbo.sendBufferData();
-            }
-            indicesVbo.unbind();
+            indicesVbo.sendBufferData(true);
         } else {
             indicesCount = 0;
         }
@@ -160,11 +152,7 @@ public class Mesh extends Object3d {
 
         vao.bind();
         {
-            colorsVbo.bind();
-            {
-                colorsVbo.sendBufferData();
-            }
-            colorsVbo.unbind();
+            colorsVbo.sendBufferData(true);
         }
         vao.unbind();
     }
@@ -178,11 +166,7 @@ public class Mesh extends Object3d {
 
         vao.bind();
         {
-            verticesVbo.bind();
-            {
-                verticesVbo.sendBufferData();
-            }
-            verticesVbo.unbind();
+            verticesVbo.sendBufferData(true);
         }
         vao.unbind();
     }

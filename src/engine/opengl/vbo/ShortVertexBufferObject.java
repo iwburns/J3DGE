@@ -21,8 +21,14 @@ public class ShortVertexBufferObject extends VertexBufferObject {
     }
 
     @Override
-    public void sendBufferData() {
+    public void sendBufferData(boolean autoBind) {
+        if (autoBind) {
+            bind();
+        }
         glBufferData(bufferTarget, bufferData, usageHint);
+        if (autoBind) {
+            unbind();
+        }
     }
 
     @Override

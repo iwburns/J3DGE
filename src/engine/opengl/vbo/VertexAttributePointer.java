@@ -2,9 +2,9 @@ package engine.opengl.vbo;
 
 import org.lwjgl.opengl.GL11;
 
-import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
-
 public class VertexAttributePointer {
+
+    //TODO: think about the concept of a VertexAttribute and how that would fit in with this and the attributes in ShaderProgram
 
     //TODO: add the other valid types
     public static final int DATA_TYPE_FLOAT = GL11.GL_FLOAT;

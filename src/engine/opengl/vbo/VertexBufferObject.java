@@ -3,7 +3,6 @@ package engine.opengl.vbo;
 import java.nio.Buffer;
 import java.util.ArrayList;
 
-import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 
@@ -58,7 +57,10 @@ public abstract class VertexBufferObject {
         vertexAttributePointers.remove(vertexAttributePointer);
     }
 
-    public void sendVertexAttributes() {
+    public void sendVertexAttributes(boolean autoBind) {
+        if (autoBind) {
+            bind();
+        }
         vertexAttributePointers.forEach(vertexAttributePointer -> {
             glVertexAttribPointer(
                     vertexAttributePointer.getLocation(),
@@ -69,18 +71,21 @@ public abstract class VertexBufferObject {
                     vertexAttributePointer.getOffset()
             );
         });
+        if (autoBind) {
+            unbind();
+        }
     }
 
     public void sendAllData() {
         bind();
         {
-            sendBufferData();
-            sendVertexAttributes();
+            sendBufferData(false);
+            sendVertexAttributes(false);
         }
         unbind();
     }
 
-    public abstract void sendBufferData();
+    public abstract void sendBufferData(boolean autoBind);
 
     public abstract Buffer getBufferData();
 
