@@ -1,7 +1,7 @@
 package engine.opengl.vao;
 
-import engine.opengl.vbo.FloatVertexBufferObject;
-import engine.opengl.vbo.ShortIndexBufferObject;
+import engine.opengl.vbo.IndexBufferObject;
+import engine.opengl.vbo.VertexBufferObject;
 
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
@@ -11,9 +11,9 @@ public class VertexArrayObject {
 
     private final int id;
     private final boolean indexed;
-    private FloatVertexBufferObject verticesVbo;
-    private FloatVertexBufferObject colorsVbo;
-    private ShortIndexBufferObject indicesVbo;
+    private VertexBufferObject verticesVbo;
+    private VertexBufferObject colorsVbo;
+    private IndexBufferObject indicesVbo;
 
     public VertexArrayObject(boolean indexed) {
         id = glGenVertexArrays();
@@ -50,27 +50,27 @@ public class VertexArrayObject {
         }
     }
 
-    public FloatVertexBufferObject getVerticesVbo() {
+    public VertexBufferObject getVerticesVbo() {
         return verticesVbo;
     }
 
-    public void setVerticesVbo(FloatVertexBufferObject verticesVbo) {
+    public void setVerticesVbo(VertexBufferObject verticesVbo) {
         this.verticesVbo = verticesVbo;
     }
 
-    public FloatVertexBufferObject getColorsVbo() {
+    public VertexBufferObject getColorsVbo() {
         return colorsVbo;
     }
 
-    public void setColorsVbo(FloatVertexBufferObject colorsVbo) {
+    public void setColorsVbo(VertexBufferObject colorsVbo) {
         this.colorsVbo = colorsVbo;
     }
 
-    public ShortIndexBufferObject getIndicesVbo() {
+    public IndexBufferObject getIndicesVbo() {
         return indicesVbo;
     }
 
-    public void setIndicesVbo(ShortIndexBufferObject vbo) {
+    public void setIndicesVbo(IndexBufferObject vbo) {
         if (!indexed) {
             System.out.println("ERROR: This VertexArrayObject is not indexed and cannot have an indicesVbo added to it.");
             return;
