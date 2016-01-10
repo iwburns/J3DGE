@@ -3,6 +3,7 @@ package engine.object3d;
 import engine.geometry.Geometry;
 import engine.material.Material;
 import engine.opengl.vao.VertexArrayObject;
+import engine.opengl.vbo.VertexAttributePointer;
 import engine.opengl.vbo.VertexBufferObject;
 import engine.opengl.vbo.FloatVertexBufferObject;
 import engine.opengl.vbo.ShortVertexBufferObject;
@@ -102,6 +103,11 @@ public class Mesh extends Object3d {
         verticesVbo = new FloatVertexBufferObject(VertexBufferObject.BUFFER_TARGET_ARRAY_BUFFER);
         verticesVbo.setBufferData(verticesBuffer);
         int positionLocation = program.getAttributeLocation(program.positionAttributeName);
+        verticesVbo.addVertexAttributePointer(new VertexAttributePointer(
+                positionLocation,
+                4,
+                VertexAttributePointer.DATA_TYPE_FLOAT
+        ));
 
         colorsCount = colors.length;
         FloatBuffer colorsBuffer = BufferUtils.createFloatBuffer(colorsCount);
@@ -110,6 +116,12 @@ public class Mesh extends Object3d {
         colorsVbo = new FloatVertexBufferObject(VertexBufferObject.BUFFER_TARGET_ARRAY_BUFFER);
         colorsVbo.setBufferData(colorsBuffer);
         int colorLocation = program.getAttributeLocation(program.colorAttributeName);
+        colorsVbo.addVertexAttributePointer(new VertexAttributePointer(
+                colorLocation,
+                4,
+                VertexAttributePointer.DATA_TYPE_FLOAT
+        ));
+
 
         vao = new VertexArrayObject();
         vao.bind();
@@ -117,28 +129,14 @@ public class Mesh extends Object3d {
             verticesVbo.bind();
             {
                 verticesVbo.sendBufferData();
-                verticesVbo.addAttributePointer(
-                          positionLocation
-                        , 4
-                        , VertexBufferObject.DATA_TYPE_FLOAT
-                        , false
-                        , 0
-                        , 0
-                );
+                verticesVbo.sendVertexAttributes();
             }
             verticesVbo.unbind();
 
             colorsVbo.bind();
             {
                 colorsVbo.sendBufferData();
-                verticesVbo.addAttributePointer(
-                          colorLocation
-                        , 4
-                        , VertexBufferObject.DATA_TYPE_FLOAT
-                        , false
-                        , 0
-                        , 0
-                );
+                colorsVbo.sendVertexAttributes();
             }
             verticesVbo.unbind();
         }
