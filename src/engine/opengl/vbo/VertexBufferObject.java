@@ -50,14 +50,12 @@ public abstract class VertexBufferObject {
         this.usageHint = usageHint;
     }
 
-    public abstract void sendBufferData();
-
-    public abstract Buffer getBufferData();
-
-    public abstract void setBufferData(Buffer b);
-
     public void addVertexAttributePointer(VertexAttributePointer vertexAttributePointer) {
         vertexAttributePointers.add(vertexAttributePointer);
+    }
+
+    public void removeVertexAttributePointer(VertexAttributePointer vertexAttributePointer) {
+        vertexAttributePointers.remove(vertexAttributePointer);
     }
 
     public void sendVertexAttributes() {
@@ -72,5 +70,20 @@ public abstract class VertexBufferObject {
             );
         });
     }
+
+    public void sendAllData() {
+        bind();
+        {
+            sendBufferData();
+            sendVertexAttributes();
+        }
+        unbind();
+    }
+
+    public abstract void sendBufferData();
+
+    public abstract Buffer getBufferData();
+
+    public abstract void setBufferData(Buffer b);
 
 }

@@ -126,19 +126,8 @@ public class Mesh extends Object3d {
         vao = new VertexArrayObject();
         vao.bind();
         {
-            verticesVbo.bind();
-            {
-                verticesVbo.sendBufferData();
-                verticesVbo.sendVertexAttributes();
-            }
-            verticesVbo.unbind();
-
-            colorsVbo.bind();
-            {
-                colorsVbo.sendBufferData();
-                colorsVbo.sendVertexAttributes();
-            }
-            verticesVbo.unbind();
+            verticesVbo.sendAllData();
+            colorsVbo.sendAllData();
         }
         vao.unbind();
 
