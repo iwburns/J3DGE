@@ -9,6 +9,8 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Mouse {
 
+    //TODO: make all of this static, you can't create more than one keyboard
+
     public static final int MOUSE_BUTTON_STATUS_UP = 0;
     public static final int MOUSE_BUTTON_STATUS_DOWN = 1;
 

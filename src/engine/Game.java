@@ -33,4 +33,6 @@ public abstract class Game {
 
     public abstract int getTargetUps();
 
+    public abstract boolean shouldClose();
+
 }

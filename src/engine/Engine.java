@@ -116,6 +116,9 @@ public class Engine {
 
     private void update(float delta) {
         game.update(delta);
+        if (game.shouldClose()) {
+            window.setShouldClose();
+        }
     }
 
     private void render() {

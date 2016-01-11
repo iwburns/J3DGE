@@ -30,6 +30,8 @@ public class Demo extends Game {
     private int width;
     private int height;
 
+    private boolean shouldClose = false;
+
     public Demo() {
         this(DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
@@ -97,6 +99,9 @@ public class Demo extends Game {
 
         cameraMotion = new Vector3f();
 
+        if (keyboard.isKeyDown(GLFW_KEY_ESCAPE)) {
+            shouldClose = true;
+        }
         if (keyboard.isKeyDown(GLFW_KEY_W)) {
             cameraMotion.add(new Vector3f(0, 0, -moveAmt));
         }
@@ -166,5 +171,10 @@ public class Demo extends Game {
     @Override
     public int getTargetUps() {
         return DEFAULT_TARGET_UPS;
+    }
+
+    @Override
+    public boolean shouldClose() {
+        return shouldClose;
     }
 }

@@ -49,6 +49,10 @@ public class Window {
         glfwSetWindowPos(windowHandle, xPos, yPos);
     }
 
+    public void setShouldClose() {
+        glfwSetWindowShouldClose(windowHandle, GLFW_TRUE);
+    }
+
     public boolean shouldClose() {
         return glfwWindowShouldClose(windowHandle) == GLFW_TRUE;
     }
