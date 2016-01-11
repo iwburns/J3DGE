@@ -12,21 +12,35 @@ public class Geometry {
 
     protected boolean indexed = false;
     protected float[] vertices;
+    protected float[] normals;
     protected float[] colors;
     protected int drawMode;
 
-    public Geometry(float[] vertices, float[] colors, int glDrawMode) {
+    public Geometry(float[] vertices, float[] normals, float[] colors, int glDrawMode) {
         this.vertices = vertices;
+        this.normals = normals;
         this.colors = colors;
         drawMode = glDrawMode;
     }
 
-    public Geometry(float[] vertices, float[] colors) {
-        this(vertices, colors, GL_TRIANGLES);
+    public Geometry(float[] vertices, float[] normals, float[] colors) {
+        this(vertices, normals, colors, DRAW_MODE_TRIANGLES);
+    }
+
+    public float[] getVertices() {
+        return vertices;
+    }
+
+    public float[] getNormals() {
+        return normals;
     }
 
     public float[] getColors() {
         return colors;
+    }
+
+    public short[] getIndices() {
+        return null;
     }
 
     public int getDrawMode() {
@@ -37,16 +51,8 @@ public class Geometry {
         drawMode = dm;
     }
 
-    public float[] getVertices() {
-        return vertices;
-    }
-
     public boolean isIndexed() {
         return indexed;
-    }
-
-    public short[] getIndices() {
-        return null;
     }
 
 }

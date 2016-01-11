@@ -6,14 +6,14 @@ public class IndexedGeometry extends Geometry {
 
     private short[] indices;
 
-    public IndexedGeometry(float[] vertices, float[] colors, short[] indices, int glDrawMode) {
-        super(vertices, colors, glDrawMode);
+    public IndexedGeometry(float[] vertices, float[] normals, float[] colors, short[] indices, int glDrawMode) {
+        super(vertices, normals, colors, glDrawMode);
         this.indices = indices;
         indexed = true;
     }
 
-    public IndexedGeometry(float[] vertices, float[] colors, short[] indices) {
-        this(vertices, colors, indices, GL_TRIANGLES);
+    public IndexedGeometry(float[] vertices, float[] normals, float[] colors, short[] indices) {
+        this(vertices, normals, colors, indices, GL_TRIANGLES);
     }
 
     public short[] getIndices() {

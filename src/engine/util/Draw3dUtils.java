@@ -61,7 +61,7 @@ public class Draw3dUtils {
                 7, 3, 4
         };
 
-        return new IndexedGeometry(vertices, colors, indices);
+        return new IndexedGeometry(vertices, null, colors, indices);
 
     }
 
@@ -196,7 +196,7 @@ public class Draw3dUtils {
             }
         }
 
-        return new IndexedGeometry(vertices, colors, indices);
+        return new IndexedGeometry(vertices, null, colors, indices);
     }
 
     public static Geometry axisHelper(float length) {
@@ -240,7 +240,7 @@ public class Draw3dUtils {
                 4, 5
         };
 
-        return new IndexedGeometry(vertices, colors, indices, GL11.GL_LINES);
+        return new IndexedGeometry(vertices, null, colors, indices, GL11.GL_LINES);
     }
 
     public static Geometry gridHelper(int size, int stepping) {
@@ -312,7 +312,7 @@ public class Draw3dUtils {
             indices[i] = i;
         }
 
-        return new IndexedGeometry(vertices, colors, indices, GL11.GL_LINES);
+        return new IndexedGeometry(vertices, null, colors, indices, GL11.GL_LINES);
     }
 
 }
