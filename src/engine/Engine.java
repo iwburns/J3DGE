@@ -120,7 +120,7 @@ public class Engine {
 
     private void render() {
         renderer.render(game.getScene(), game.getCamera());
-        window.update();
+        window.update(game.getCamera());
     }
 
     private void loop() {

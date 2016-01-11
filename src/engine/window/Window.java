@@ -1,5 +1,6 @@
 package engine.window;
 
+import engine.object3d.camera.Camera;
 import org.lwjgl.BufferUtils;
 
 import java.nio.IntBuffer;
@@ -56,12 +57,12 @@ public class Window {
         glfwSwapBuffers(windowHandle);
     }
 
-    public void update() {
+    public void update(Camera camera) {
         swapBuffers();
-        updateWindowSize();
+        updateWindowSize(camera);
     }
 
-    private void updateWindowSize() {
+    private void updateWindowSize(Camera camera) {
         getFrameBufferSize(widthBuffer, heightBuffer);
 
         width = widthBuffer.get();
@@ -71,6 +72,7 @@ public class Window {
         heightBuffer.flip();
 
         glViewport(0, 0, width, height);
+        camera.setAspectRatio((float)width / (float)height);
     }
 
 }

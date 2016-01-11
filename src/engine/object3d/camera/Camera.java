@@ -6,21 +6,51 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
-public class Camera extends Object3d {
+public abstract class Camera extends Object3d {
 
     protected Matrix4f projection;
+    protected boolean projectionNeedsUpdate;
 
-    public Camera() {
+    protected float aspectRatio;
+    protected float near;
+    protected float far;
+
+    protected Camera() {
         super();
         projection = new Matrix4f();
+        projectionNeedsUpdate = false;
     }
 
-    public Matrix4f getProjection() {
-        return projection;
-    }
+    public abstract Matrix4f getProjection();
 
     public Matrix4f getView() {
         return getWorldToLocal();
     }
 
+    public float getAspectRatio() {
+        return aspectRatio;
+    }
+
+    public void setAspectRatio(float aspectRatio) {
+        this.aspectRatio = aspectRatio;
+        projectionNeedsUpdate = true;
+    }
+
+    public float getNear() {
+        return near;
+    }
+
+    public void setNear(float near) {
+        this.near = near;
+        projectionNeedsUpdate = true;
+    }
+
+    public float getFar() {
+        return far;
+    }
+
+    public void setFar(float far) {
+        this.far = far;
+        projectionNeedsUpdate = true;
+    }
 }
