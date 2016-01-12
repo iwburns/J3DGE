@@ -26,10 +26,10 @@ public class Engine {
 
     private Timer timer = new Timer();
     private Renderer renderer = new Renderer();
+    Thread renderingThread;
 
     public Game game;
 
-    Object lock = new Object();
     boolean destroyed = false;
 
     public Engine(Game g) {
@@ -78,13 +78,16 @@ public class Engine {
                 (vidmode.width() - game.getWidth()) / 2,
                 (vidmode.height() - game.getHeight()) / 2
         );
+
+        // Make the window visible
+        glfwShowWindow(window.getWindowHandle());
     }
 
     private void loop() {
 
-        Thread renderThread = new Thread(new RenderClass());
+        renderingThread = new Thread(new RenderingEngine());
 
-        renderThread.start();
+        renderingThread.start();
 
         while (!window.shouldClose()) {
             glfwWaitEvents();
@@ -93,10 +96,15 @@ public class Engine {
 
     private void cleanUpWindow() {
         // Release window and window callbacks
-        synchronized (lock) {
-            destroyed = true;
-            window.destroy();
+        destroyed = true;
+
+        try {
+            renderingThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
+
+        window.destroy();
         keyboard.destroy();
         mouse.destroy();
     }
@@ -107,17 +115,13 @@ public class Engine {
         errorCallback.release();
     }
 
-    //TODO: come up with a better name for this and possibly put it somewhere else.
-    private class RenderClass implements Runnable {
+    private class RenderingEngine implements Runnable {
 
         private void initOpenGL() {
             glfwMakeContextCurrent(window.getWindowHandle());
 
             // Enable v-sync
             glfwSwapInterval(1);
-
-            // Make the window visible
-            glfwShowWindow(window.getWindowHandle());
 
             // This line is critical for LWJGL's interoperation with GLFW's
             // OpenGL context, or any context that is managed externally.
@@ -179,9 +183,6 @@ public class Engine {
                 //TODO: add some kind of sync method similar to this: https://github.com/SilverTiger/lwjgl3-tutorial/blob/master/src/silvertiger/tutorial/lwjgl/core/Game.java
             }
         }
-
-
-
     }
 
 }

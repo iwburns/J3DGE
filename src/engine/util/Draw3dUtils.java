@@ -259,7 +259,7 @@ public class Draw3dUtils {
         short[] indices = new short[total + 4];
 
         int j = 0;
-        float color = 0.2f;
+        float color = 0.25f;
 
         for (float i = xMin; i <= xMax; i += stepping) {
 
