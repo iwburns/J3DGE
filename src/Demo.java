@@ -54,8 +54,8 @@ public class Demo extends Game {
         camera.moveUp(1);
 
         Material material = new Material();
-        Geometry mesh1Geo = Draw3dUtils.nonIndexedCube(1, 1, 1, 1, 0, 0);
-        Geometry mesh2Geo = Draw3dUtils.nonIndexedCube(0.5f, 2, 0.5f, 0, 0, 1);
+        Geometry mesh1Geo = Draw3dUtils.cubeGeometry(1, 1, 1, 1, 0, 0);
+        Geometry mesh2Geo = Draw3dUtils.cubeGeometry(0.5f, 2, 0.5f, 0, 0, 1);
         Geometry mesh3Geo = Draw3dUtils.sphereGeometry(0.1f, 10, 10, 0, 1, 0);
         Geometry gridGeo = Draw3dUtils.gridHelper(10, 1);
         Geometry axisGeo = Draw3dUtils.axisHelper(1);

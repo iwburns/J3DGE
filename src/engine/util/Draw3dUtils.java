@@ -28,7 +28,7 @@ public class Draw3dUtils {
         };
     }
 
-    public static Geometry nonIndexedCube(float width, float height, float depth, float r, float g, float b) {
+    public static Geometry cubeGeometry(float width, float height, float depth, float r, float g, float b) {
 
         float[] vertexPositions = Draw3dUtils.generateCubeVertexPositions(width, height, depth);
 
@@ -74,7 +74,7 @@ public class Draw3dUtils {
         return new Geometry(vertices, null, colors);
     }
 
-    public static Geometry cubeGeometry(float width, float height, float depth, float r, float g, float b) {
+    public static Geometry indexedCubeGeometry(float width, float height, float depth, float r, float g, float b) {
         float[] vertices = generateCubeVertexPositions(width, height, depth);
 
         float[] colors = {
