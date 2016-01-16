@@ -6,7 +6,7 @@ import org.lwjgl.opengl.GL11;
 
 public class Draw3dUtils {
 
-    public static Geometry cubeGeometry(float width, float height, float depth, float r, float g, float b) {
+    private static float[] generateCubeVertexPositions(float width, float height, float depth) {
         float xMin = -width/2f;
         float xMax = -xMin;
         float yMin = -height/2f;
@@ -14,7 +14,7 @@ public class Draw3dUtils {
         float zMin = -depth/2f;
         float zMax = -zMin;
 
-        float[] vertices = {
+        return new float[]{
                 //front face vertices
                 xMin, yMin, zMax, 1f,   //0
                 xMax, yMin, zMax, 1f,   //1
@@ -26,6 +26,56 @@ public class Draw3dUtils {
                 xMax, yMin, zMin, 1f,   //6
                 xMin, yMin, zMin, 1f    //7
         };
+    }
+
+    public static Geometry nonIndexedCube(float width, float height, float depth, float r, float g, float b) {
+
+        float[] vertexPositions = Draw3dUtils.generateCubeVertexPositions(width, height, depth);
+
+        short[] positionIndices = {
+                //front face indices
+                0, 1, 2,
+                0, 2, 3,
+                //top face indices
+                3, 2, 5,
+                3, 5, 4,
+                //back face indices
+                4, 5, 6,
+                4, 6, 7,
+                //bottom face indices
+                7, 6, 1,
+                7, 1, 0,
+                //right face indices
+                1, 6, 5,
+                1, 5, 2,
+                //left face indices
+                7, 0, 3,
+                7, 3, 4
+        };
+
+        float[] vertices = new float[positionIndices.length * 4]; // 4 floats per vertex
+        float[] colors = new float[positionIndices.length * 4]; // 4 floats per vertex
+
+        int vIndex = 0;
+        for (int i = 0; i < positionIndices.length; i++) {
+            vertices[vIndex] = vertexPositions[(positionIndices[i] * 4)];
+            vertices[vIndex + 1] = vertexPositions[(positionIndices[i] * 4) + 1];
+            vertices[vIndex + 2] = vertexPositions[(positionIndices[i] * 4) + 2];
+            vertices[vIndex + 3] = vertexPositions[(positionIndices[i] * 4) + 3];
+
+            colors[vIndex] = r;
+            colors[vIndex + 1] = g;
+            colors[vIndex + 2] = b;
+            colors[vIndex + 3] = 1;
+
+            vIndex += 4;
+        }
+
+        return new Geometry(vertices, null, colors);
+    }
+
+    public static Geometry cubeGeometry(float width, float height, float depth, float r, float g, float b) {
+        float[] vertices = generateCubeVertexPositions(width, height, depth);
 
         float[] colors = {
                 //front face colors
