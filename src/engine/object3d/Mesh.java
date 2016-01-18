@@ -67,6 +67,14 @@ public class Mesh extends Object3d {
         if (geometry.isIndexed()) {
             IndexBufferObject indicesVbo = new ShortIndexBufferObject(setupShortBuffer(geometry.getIndices()));
             vao.setIndicesVbo(indicesVbo);
+        } else {
+            VertexBufferObject normalsVbo = new FloatVertexBufferObject(setupFloatBuffer(geometry.getNormals()));
+            normalsVbo.addVertexAttributePointer(new VertexAttributePointer(
+                    program.getAttributeLocation(program.normalAttributeName),
+                    4,
+                    VertexAttributePointer.DATA_TYPE_FLOAT
+            ));
+            vao.setNormalsVbo(normalsVbo);
         }
 
         vao.sendVboDataAutoBind();

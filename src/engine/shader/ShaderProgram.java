@@ -15,9 +15,11 @@ import static org.lwjgl.opengl.GL20.*;
 public class ShaderProgram {
 
     public static final String DEFAULT_POSITION_ATTRIBUTE_NAME = "position";
+    public static final String DEFAULT_NORMAL_ATTRIBUTE_NAME = "normal";
     public static final String DEFAULT_COLOR_ATTRIBUTE_NAME = "color";
 
     public String positionAttributeName;
+    public String normalAttributeName;
     public String colorAttributeName;
     private int programId;
 
@@ -26,16 +28,17 @@ public class ShaderProgram {
     private ArrayList<Shader> shaders = new ArrayList<>();
 
     public ShaderProgram() {
-        this(DEFAULT_POSITION_ATTRIBUTE_NAME, DEFAULT_COLOR_ATTRIBUTE_NAME);
+        this(DEFAULT_POSITION_ATTRIBUTE_NAME, DEFAULT_NORMAL_ATTRIBUTE_NAME, DEFAULT_COLOR_ATTRIBUTE_NAME);
     }
 
     public ShaderProgram(String positionAttributeName) {
-        this(positionAttributeName, DEFAULT_COLOR_ATTRIBUTE_NAME);
+        this(positionAttributeName, DEFAULT_NORMAL_ATTRIBUTE_NAME, DEFAULT_COLOR_ATTRIBUTE_NAME);
     }
 
-    public ShaderProgram(String positionAttributeName, String colorAttributeName) {
+    public ShaderProgram(String positionAttributeName, String normalAttributeName, String colorAttributeName) {
         programId = glCreateProgram();
         this.positionAttributeName = positionAttributeName;
+        this.normalAttributeName = normalAttributeName;
         this.colorAttributeName = colorAttributeName;
     }
 

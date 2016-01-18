@@ -12,6 +12,7 @@ public class VertexArrayObject {
     private final int id;
     private final boolean indexed;
     private VertexBufferObject verticesVbo;
+    private VertexBufferObject normalsVbo;
     private VertexBufferObject colorsVbo;
     private IndexBufferObject indicesVbo;
 
@@ -47,6 +48,8 @@ public class VertexArrayObject {
         colorsVbo.sendDataAutoBind();
         if (indexed) {
             indicesVbo.sendDataAutoBind();
+        } else {
+            normalsVbo.sendDataAutoBind();
         }
     }
 
@@ -56,6 +59,14 @@ public class VertexArrayObject {
 
     public void setVerticesVbo(VertexBufferObject verticesVbo) {
         this.verticesVbo = verticesVbo;
+    }
+
+    public VertexBufferObject getNormalsVbo() {
+        return normalsVbo;
+    }
+
+    public void setNormalsVbo(VertexBufferObject normalsVbo) {
+        this.normalsVbo = normalsVbo;
     }
 
     public VertexBufferObject getColorsVbo() {
