@@ -28,36 +28,35 @@ public class Draw3dUtils {
         };
     }
 
+    private static float[] generateCubeColors(float r, float g, float b) {
+        return new float[]{
+                //front face colors
+                r, g, b, 1f,
+                r, g, b, 1f,
+                r, g, b, 1f,
+                r, g, b, 1f,
+                //back face colors
+                r, g, b, 1f,
+                r, g, b, 1f,
+                r, g, b, 1f,
+                r, g, b, 1f
+        };
+    }
+
     public static Geometry cubeGeometry(float width, float height, float depth, float r, float g, float b) {
 
-        float[] vertexPositions = Draw3dUtils.generateCubeVertexPositions(width, height, depth);
+        IndexedGeometry indexedCube = (IndexedGeometry) Draw3dUtils.indexedCubeGeometry(width, height, depth, r, g, b);
 
-        short[] positionIndices = {
-                //front face indices
-                0, 1, 2,
-                0, 2, 3,
-                //top face indices
-                3, 2, 5,
-                3, 5, 4,
-                //back face indices
-                4, 5, 6,
-                4, 6, 7,
-                //bottom face indices
-                7, 6, 1,
-                7, 1, 0,
-                //right face indices
-                1, 6, 5,
-                1, 5, 2,
-                //left face indices
-                7, 0, 3,
-                7, 3, 4
-        };
+        short[] positionIndices = indexedCube.getIndices();
+        float[] vertexPositions = indexedCube.getVertices();
 
-        float[] vertices = new float[positionIndices.length * 4]; // 4 floats per vertex
-        float[] colors = new float[positionIndices.length * 4]; // 4 floats per vertex
+        float[] vertices = new float[positionIndices.length * 4];   // 4 floats per vertex
+        float[] normals = new float[positionIndices.length * 4];    // 4 floats per vertex
+        float[] colors = new float[positionIndices.length * 4];     // 4 floats per vertex
 
         int vIndex = 0;
-        for (short positionIndex : positionIndices) {
+        for (int i = 0; i < positionIndices.length; i++) {
+            short positionIndex = positionIndices[i];
             vertices[vIndex] = vertexPositions[(positionIndex * 4)];
             vertices[vIndex + 1] = vertexPositions[(positionIndex * 4) + 1];
             vertices[vIndex + 2] = vertexPositions[(positionIndex * 4) + 2];
@@ -76,19 +75,7 @@ public class Draw3dUtils {
 
     public static Geometry indexedCubeGeometry(float width, float height, float depth, float r, float g, float b) {
         float[] vertices = generateCubeVertexPositions(width, height, depth);
-
-        float[] colors = {
-                //front face colors
-                r, g, b, 1f,
-                r, g, b, 1f,
-                r, g, b, 1f,
-                r, g, b, 1f,
-                //back face colors
-                r, g, b, 1f,
-                r, g, b, 1f,
-                r, g, b, 1f,
-                r, g, b, 1f
-        };
+        float[] colors = generateCubeColors(r, g, b);
 
         short[] indices = {
                 //front face indices
@@ -112,7 +99,6 @@ public class Draw3dUtils {
         };
 
         return new IndexedGeometry(vertices, null, colors, indices);
-
     }
 
     public static Geometry sphereGeometry(float radius, int heightSegments, int widthSegments,  float r, float g, float b) {
