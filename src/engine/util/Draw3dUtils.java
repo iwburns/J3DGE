@@ -13,8 +13,66 @@ public class Draw3dUtils {
         float[] vertexPositions = indexedCube.getVertices();
 
         float[] vertices = new float[positionIndices.length * 4];   // 4 floats per vertex
-        float[] normals = new float[positionIndices.length * 4];    // 4 floats per vertex
         float[] colors = new float[positionIndices.length * 4];     // 4 floats per vertex
+
+        //todo: try to find a way to not have to hard code this if possible (generate it instead).
+        //this depends entirely on the way that the cube is indexed in indexedCubeGeometry
+        float[] normals = {
+                //front
+                //triangle 1
+                0, 0, 1, 1,
+                0, 0, 1, 1,
+                0, 0, 1, 1,
+                //triangle 2
+                0, 0, 1, 1,
+                0, 0, 1, 1,
+                0, 0, 1, 1,
+                //top
+                //triangle 1
+                0, 1, 0, 1,
+                0, 1, 0, 1,
+                0, 1, 0, 1,
+                //triangle 2
+                0, 1, 0, 1,
+                0, 1, 0, 1,
+                0, 1, 0, 1,
+                //back
+                //triangle 1
+                0, 0, -1, 1,
+                0, 0, -1, 1,
+                0, 0, -1, 1,
+                //triangle 2
+                0, 0, -1, 1,
+                0, 0, -1, 1,
+                0, 0, -1, 1,
+                //bottom
+                //triangle 1
+                0, -1, 0, 1,
+                0, -1, 0, 1,
+                0, -1, 0, 1,
+                //triangle 2
+                0, -1, 0, 1,
+                0, -1, 0, 1,
+                0, -1, 0, 1,
+                //right
+                //triangle 1
+                1, 0, 0, 1,
+                1, 0, 0, 1,
+                1, 0, 0, 1,
+                //triangle 2
+                1, 0, 0, 1,
+                1, 0, 0, 1,
+                1, 0, 0, 1,
+                //left
+                //triangle 1
+                -1, 0, 0, 1,
+                -1, 0, 0, 1,
+                -1, 0, 0, 1,
+                //triangle 2
+                -1, 0, 0, 1,
+                -1, 0, 0, 1,
+                -1, 0, 0, 1
+        };
 
         int vIndex = 0;
         for (int i = 0; i < positionIndices.length; i++) {
@@ -32,7 +90,7 @@ public class Draw3dUtils {
             vIndex += 4;
         }
 
-        return new Geometry(vertices, null, colors);
+        return new Geometry(vertices, normals, colors);
     }
 
     public static Geometry indexedCubeGeometry(float width, float height, float depth, float r, float g, float b) {
