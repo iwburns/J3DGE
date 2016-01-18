@@ -57,11 +57,11 @@ public class Draw3dUtils {
         float[] colors = new float[positionIndices.length * 4]; // 4 floats per vertex
 
         int vIndex = 0;
-        for (int i = 0; i < positionIndices.length; i++) {
-            vertices[vIndex] = vertexPositions[(positionIndices[i] * 4)];
-            vertices[vIndex + 1] = vertexPositions[(positionIndices[i] * 4) + 1];
-            vertices[vIndex + 2] = vertexPositions[(positionIndices[i] * 4) + 2];
-            vertices[vIndex + 3] = vertexPositions[(positionIndices[i] * 4) + 3];
+        for (short positionIndex : positionIndices) {
+            vertices[vIndex] = vertexPositions[(positionIndex * 4)];
+            vertices[vIndex + 1] = vertexPositions[(positionIndex * 4) + 1];
+            vertices[vIndex + 2] = vertexPositions[(positionIndex * 4) + 2];
+            vertices[vIndex + 3] = vertexPositions[(positionIndex * 4) + 3];
 
             colors[vIndex] = r;
             colors[vIndex + 1] = g;
@@ -116,6 +116,8 @@ public class Draw3dUtils {
     }
 
     public static Geometry sphereGeometry(float radius, int heightSegments, int widthSegments,  float r, float g, float b) {
+
+        //TODO: create non-indexed version of this.
 
         float a = 1f;   //alpha
 
