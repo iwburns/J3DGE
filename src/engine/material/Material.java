@@ -7,13 +7,13 @@ import static org.lwjgl.opengl.GL20.GL_VERTEX_SHADER;
 
 public class Material {
 
-    private ShaderProgram program;
+    protected ShaderProgram program;
 
     public Material() {
         program = new ShaderProgram();
 
-        program.attachShader("res/shaders/vertex.glsl", GL_VERTEX_SHADER);
-        program.attachShader("res/shaders/fragment.glsl", GL_FRAGMENT_SHADER);
+        program.attachShader("res/shaders/basicVertex.glsl", GL_VERTEX_SHADER);
+        program.attachShader("res/shaders/basicFragment.glsl", GL_FRAGMENT_SHADER);
 
         program.link();
         program.validate();

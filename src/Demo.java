@@ -3,6 +3,7 @@ import engine.geometry.Geometry;
 import engine.input.Keyboard;
 import engine.material.Material;
 import engine.input.Mouse;
+import engine.material.PhongMaterial;
 import engine.object3d.Mesh;
 import engine.object3d.Object3d;
 import engine.object3d.camera.Camera;
@@ -53,21 +54,22 @@ public class Demo extends Game {
         camera.moveRight(2);
         camera.moveUp(1);
 
-        Material material = new Material();
+        Material basicMaterial = new Material();
+        Material phongMaterial = new PhongMaterial();
         Geometry mesh1Geo = Draw3dUtils.cubeGeometry(1, 1, 1, 1, 0, 0);
         Geometry mesh2Geo = Draw3dUtils.cubeGeometry(0.5f, 2, 0.5f, 0, 0, 1);
         Geometry mesh3Geo = Draw3dUtils.sphereGeometry(0.1f, 10, 10, 0, 1, 0);
         Geometry gridGeo = Draw3dUtils.gridHelper(10, 1);
         Geometry axisGeo = Draw3dUtils.axisHelper(1);
 
-        Mesh gridMesh = new Mesh(gridGeo, material);
-        Mesh axisMesh = new Mesh(axisGeo, material);
+        Mesh gridMesh = new Mesh(gridGeo, basicMaterial);
+        Mesh axisMesh = new Mesh(axisGeo, basicMaterial);
         scene.add(gridMesh);
         scene.add(axisMesh);
 
-        mesh1 = new Mesh(mesh1Geo, material);
-        mesh2 = new Mesh(mesh2Geo, material);
-        mesh3 = new Mesh(mesh3Geo, material);
+        mesh1 = new Mesh(mesh1Geo, phongMaterial);
+        mesh2 = new Mesh(mesh2Geo, phongMaterial);
+        mesh3 = new Mesh(mesh3Geo, basicMaterial);
 
         mesh1.translate(new Vector3f(0, 1, 0));
         mesh2.translate(new Vector3f(2, 0, 0));
