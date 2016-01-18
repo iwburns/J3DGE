@@ -6,45 +6,7 @@ import org.lwjgl.opengl.GL11;
 
 public class Draw3dUtils {
 
-    private static float[] generateCubeVertexPositions(float width, float height, float depth) {
-        float xMin = -width/2f;
-        float xMax = -xMin;
-        float yMin = -height/2f;
-        float yMax = -yMin;
-        float zMin = -depth/2f;
-        float zMax = -zMin;
-
-        return new float[]{
-                //front face vertices
-                xMin, yMin, zMax, 1f,   //0
-                xMax, yMin, zMax, 1f,   //1
-                xMax, yMax, zMax, 1f,   //2
-                xMin, yMax, zMax, 1f,   //3
-                //back face vertices
-                xMin, yMax, zMin, 1f,   //4
-                xMax, yMax, zMin, 1f,   //5
-                xMax, yMin, zMin, 1f,   //6
-                xMin, yMin, zMin, 1f    //7
-        };
-    }
-
-    private static float[] generateCubeColors(float r, float g, float b) {
-        return new float[]{
-                //front face colors
-                r, g, b, 1f,
-                r, g, b, 1f,
-                r, g, b, 1f,
-                r, g, b, 1f,
-                //back face colors
-                r, g, b, 1f,
-                r, g, b, 1f,
-                r, g, b, 1f,
-                r, g, b, 1f
-        };
-    }
-
     public static Geometry cubeGeometry(float width, float height, float depth, float r, float g, float b) {
-
         IndexedGeometry indexedCube = (IndexedGeometry) Draw3dUtils.indexedCubeGeometry(width, height, depth, r, g, b);
 
         short[] positionIndices = indexedCube.getIndices();
@@ -74,8 +36,38 @@ public class Draw3dUtils {
     }
 
     public static Geometry indexedCubeGeometry(float width, float height, float depth, float r, float g, float b) {
-        float[] vertices = generateCubeVertexPositions(width, height, depth);
-        float[] colors = generateCubeColors(r, g, b);
+        float xMin = -width/2f;
+        float xMax = -xMin;
+        float yMin = -height/2f;
+        float yMax = -yMin;
+        float zMin = -depth/2f;
+        float zMax = -zMin;
+
+        float[] vertices = {
+                //front face vertices
+                xMin, yMin, zMax, 1f,   //0
+                xMax, yMin, zMax, 1f,   //1
+                xMax, yMax, zMax, 1f,   //2
+                xMin, yMax, zMax, 1f,   //3
+                //back face vertices
+                xMin, yMax, zMin, 1f,   //4
+                xMax, yMax, zMin, 1f,   //5
+                xMax, yMin, zMin, 1f,   //6
+                xMin, yMin, zMin, 1f    //7
+        };
+
+        float[] colors = {
+                //front face colors
+                r, g, b, 1f,
+                r, g, b, 1f,
+                r, g, b, 1f,
+                r, g, b, 1f,
+                //back face colors
+                r, g, b, 1f,
+                r, g, b, 1f,
+                r, g, b, 1f,
+                r, g, b, 1f
+        };
 
         short[] indices = {
                 //front face indices
