@@ -127,7 +127,7 @@ public class Object3d {
          */
 
         if (parent != null) {
-            localToWorld = parent.getLocalToWorld();
+            localToWorld = new Matrix4f(parent.getLocalToWorld());
         } else {
             localToWorld = new Matrix4f();
         }
