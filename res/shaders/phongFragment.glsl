@@ -11,14 +11,13 @@ out vec4 out_Color;
 
 void main(void) {
     vec3 normal = normalize(vec3(pass_Normal.xyz));
-    vec3 position = vec3(pass_Position.xyz);
+    vec3 surfacePos = vec3(pass_Position.xyz);
+    vec3 surfaceColor = pass_Color.rgb;
+    float surfaceAlpha = pass_Color.a;
 
-    vec3 positionDiff = lightPosition - position;
+    vec3 surfaceToLight = normalize(lightPosition - surfacePos);
 
-    float brightness = dot(normal, positionDiff) / (length(positionDiff) * length(normal));
-    brightness = clamp(brightness, 0, 1);
+    float diffuseCoefficient = max(0.0, dot(normal, surfaceToLight));
 
-    vec3 reflectedColor = lightColor * pass_Color.rgb;
-
-    out_Color = vec4(brightness * reflectedColor, pass_Color.a);
+    out_Color = vec4(diffuseCoefficient * lightColor * surfaceColor, surfaceAlpha);
 }
