@@ -75,14 +75,12 @@ public class Demo extends Game {
 
         mesh1.translate(new Vector3f(0, 1, 0));
         mesh2.translate(new Vector3f(2, 0, 0));
-        mesh3.translate(new Vector3f(0, 0, 0));
 
         object1 = new Object3d();
 
         scene.add(object1);
         object1.addChild(mesh1);
         mesh1.addChild(mesh2);
-//        mesh2.addChild(mesh3);
 
         Light l = new Light(1, 1, 1);
         scene.addLight(l);

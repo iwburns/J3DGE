@@ -48,7 +48,8 @@ public class VertexArrayObject {
         colorsVbo.sendDataAutoBind();
         if (indexed) {
             indicesVbo.sendDataAutoBind();
-        } else {
+        }
+        if (normalsVbo != null) {
             normalsVbo.sendDataAutoBind();
         }
     }
