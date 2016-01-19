@@ -64,6 +64,8 @@ public class Demo extends Game {
         Geometry gridGeo = Draw3dUtils.gridHelper(10, 1);
         Geometry axisGeo = Draw3dUtils.axisHelper(1);
 
+        Geometry wallGeo = Draw3dUtils.cubeGeometry(10, 10, 0.5f, 26/255f, 188/255f, 156/255f);
+
         Mesh gridMesh = new Mesh(gridGeo, basicMaterial);
         Mesh axisMesh = new Mesh(axisGeo, basicMaterial);
         scene.add(gridMesh);
@@ -73,22 +75,31 @@ public class Demo extends Game {
         mesh2 = new Mesh(mesh2Geo, phongMaterial);
         mesh3 = new Mesh(mesh3Geo, basicMaterial);
 
-        mesh1.translate(new Vector3f(0, 1, 0));
-        mesh2.translate(new Vector3f(2, 0, 0));
+        Mesh wallMesh = new Mesh(wallGeo, phongMaterial);
+        Mesh wallMesh2 = new Mesh(wallGeo, phongMaterial);
+
+        wallMesh.rotateY(90, true);
+        wallMesh.translate(new Vector3f(5, 0, 0));
+        wallMesh2.translate(new Vector3f(0, 0, -5));
+
+        scene.add(wallMesh);
+        scene.add(wallMesh2);
 
         object1 = new Object3d();
-
         scene.add(object1);
+
         object1.addChild(mesh1);
+        mesh1.translate(new Vector3f(0, 1, 0));
         mesh1.addChild(mesh2);
+        mesh2.translate(new Vector3f(2, 0, 0));
 
         Light l = new Light(1, 1, 1);
         scene.addLight(l);
         l.addChild(mesh3);
 
-        l.moveForward(-2.5f);
-        l.moveRight(2.5f);
-        l.moveUp(-1);
+        l.moveForward(0);
+        l.moveRight(3);
+        l.moveUp(0);
     }
 
     @Override
