@@ -8,9 +8,12 @@ import engine.object3d.Mesh;
 import engine.object3d.Object3d;
 import engine.object3d.camera.Camera;
 import engine.object3d.camera.PerspectiveCamera;
+import engine.object3d.light.Light;
 import engine.render.Scene;
 import engine.util.Draw3dUtils;
 import org.joml.Vector3f;
+
+import java.util.Arrays;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -51,7 +54,6 @@ public class Demo extends Game {
         mouse = new Mouse();
 
         camera.moveForward(-10);
-        camera.moveRight(2);
         camera.moveUp(1);
 
         Material basicMaterial = new Material();
@@ -73,19 +75,27 @@ public class Demo extends Game {
 
         mesh1.translate(new Vector3f(0, 1, 0));
         mesh2.translate(new Vector3f(2, 0, 0));
-        mesh3.translate(new Vector3f(1, 0, 0));
+        mesh3.translate(new Vector3f(0, 0, 0));
 
         object1 = new Object3d();
 
         scene.add(object1);
         object1.addChild(mesh1);
         mesh1.addChild(mesh2);
-        mesh2.addChild(mesh3);
+//        mesh2.addChild(mesh3);
+
+        Light l = new Light(1, 1, 1);
+        scene.addLight(l);
+        l.addChild(mesh3);
+
+        l.moveForward(-2.5f);
+        l.moveRight(2.5f);
+        l.moveUp(-1);
     }
 
     @Override
     public void update(float delta) {
-        mesh2.moveForward(5f * delta);
+//        mesh2.moveForward(5f * delta);
         object1.rotate(new Vector3f(1, 0, 0), 50 * delta);
         mesh1.rotate(new Vector3f(0, 0, 1), 50 * delta);
         mesh2.rotate(new Vector3f(0, 1, 0), 50 * delta);

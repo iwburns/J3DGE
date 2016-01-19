@@ -22,6 +22,7 @@ public class Mesh extends Object3d {
     private VertexArrayObject vao;
 
     public Mesh(Geometry g, Material m) {
+        super();
         geometry = g;
         material = m;
         setupBuffers();

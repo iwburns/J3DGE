@@ -3,6 +3,7 @@ package engine.render;
 import engine.object3d.Mesh;
 import engine.object3d.Object3d;
 import engine.object3d.camera.Camera;
+import engine.object3d.light.Light;
 import engine.shader.ShaderProgram;
 import org.lwjgl.BufferUtils;
 
@@ -20,12 +21,18 @@ public class Renderer {
     private FloatBuffer viewBuffer;
     private FloatBuffer modelBuffer;
 
+    private FloatBuffer lightPosition;
+    private FloatBuffer lightColor;
+
     private ShaderProgram currentProgram;
 
     public Renderer() {
         projectionBuffer = BufferUtils.createFloatBuffer(16);
         viewBuffer = BufferUtils.createFloatBuffer(16);
         modelBuffer = BufferUtils.createFloatBuffer(16);
+
+        lightPosition = BufferUtils.createFloatBuffer(3);
+        lightColor = BufferUtils.createFloatBuffer(3);
         currentProgram = null;
     }
 
@@ -34,6 +41,17 @@ public class Renderer {
 
         camera.getProjection().get(projectionBuffer);
         camera.getView().get(viewBuffer);
+
+        if (!scene.getLights().isEmpty()) {
+            Light light = scene.getLights().get(0);
+            light.getPosition().get(lightPosition);
+            light.getColor().get(lightColor);
+
+            for (Object3d obj: scene.getLights()) {
+                drawObject(obj);
+            }
+
+        }
 
         for (Object3d obj: scene.getObjects()) {
             drawObject(obj);
@@ -97,6 +115,11 @@ public class Renderer {
             //re-send buffer data to opengl shader uniforms (the ones for this ShaderProgram)
             glUniformMatrix4fv(currentProgram.getUniformLocation("projection"), false, projectionBuffer);
             glUniformMatrix4fv(currentProgram.getUniformLocation("view"), false, viewBuffer);
+
+            if (currentProgram.getUniformLocation("lightPosition") != null) {
+                glUniform3fv(currentProgram.getUniformLocation("lightPosition"), lightPosition);
+                glUniform3fv(currentProgram.getUniformLocation("lightColor"), lightColor);
+            }
         }
     }
 

@@ -13,8 +13,9 @@ out vec4 pass_Normal;
 out vec4 pass_Color;
 
 void main(void) {
-    pass_Position = position;
-    pass_Normal = normal;
+    //transform position and normal into worldSpace before passing to fragShader
+    pass_Position = transpose(inverse(model)) * position;
+    pass_Normal = transpose(inverse(model)) * normal;
     pass_Color = color;
 
     gl_Position = projection * view * model * position;

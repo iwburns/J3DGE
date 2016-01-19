@@ -129,7 +129,7 @@ public class ShaderProgram {
         }
     }
 
-    public int getAttributeLocation(String name) {
+    public Integer getAttributeLocation(String name) {
         return attributes.get(name);
     }
 
@@ -141,7 +141,7 @@ public class ShaderProgram {
         return programId;
     }
 
-    public int getUniformLocation(String name) {
+    public Integer getUniformLocation(String name) {
         return uniforms.get(name);
     }
 

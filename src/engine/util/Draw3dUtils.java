@@ -127,6 +127,19 @@ public class Draw3dUtils {
                 r, g, b, 1f
         };
 
+        /*
+            cube index layout
+                7---6
+                | B |   B = back
+                4---5   b = bottom
+                | t |
+            4---3---2---5
+            | l | f | r |
+            7---0---1---6
+                | b |
+                7---6
+         */
+
         short[] indices = {
                 //front face indices
                 0, 1, 2,
