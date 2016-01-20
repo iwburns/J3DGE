@@ -23,6 +23,9 @@ public class Renderer {
 
     private FloatBuffer lightPosition;
     private FloatBuffer lightColor;
+    private float lightAttenuation;
+    private float lightAmbient;
+
     private FloatBuffer cameraPosition;
 
     private ShaderProgram currentProgram;
@@ -34,6 +37,7 @@ public class Renderer {
 
         lightPosition = BufferUtils.createFloatBuffer(3);
         lightColor = BufferUtils.createFloatBuffer(3);
+
         cameraPosition = BufferUtils.createFloatBuffer(3);
         currentProgram = null;
     }
@@ -49,6 +53,8 @@ public class Renderer {
             Light light = scene.getLights().get(0);
             light.getPosition().get(lightPosition);
             light.getColor().get(lightColor);
+            lightAttenuation = light.getAttenuation();
+            lightAmbient = light.getAmbient();
 
             for (Object3d obj: scene.getLights()) {
                 drawObject(obj);
@@ -127,6 +133,15 @@ public class Renderer {
             if (lightColorLocation != null) {
                 glUniform3fv(lightColorLocation, lightColor);
             }
+            Integer lightAttenuationLocation = currentProgram.getUniformLocation("lightAttenuation");
+            if (lightAttenuationLocation != null) {
+                glUniform1f(lightAttenuationLocation, lightAttenuation);
+            }
+            Integer lightAmbientLocation = currentProgram.getUniformLocation("lightAmbient");
+            if (lightAmbientLocation != null) {
+                glUniform1f(lightAmbientLocation, lightAmbient);
+            }
+
             Integer cameraPositionLocation = currentProgram.getUniformLocation("cameraPosition");
             if (cameraPositionLocation != null) {
                 glUniform3fv(cameraPositionLocation, cameraPosition);

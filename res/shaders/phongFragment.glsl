@@ -2,6 +2,9 @@
 
 uniform vec3 lightPosition;
 uniform vec3 lightColor;
+uniform float lightAttenuation;
+uniform float lightAmbient;
+
 uniform vec3 cameraPosition;
 
 in vec4 pass_Position;
@@ -12,8 +15,6 @@ out vec4 out_Color;
 
 void main(void) {
     float materialShininess = 1000;
-    float ambientCoefficient = 0.01;
-    float lightAttenuation = 0.01;
 
     vec3 normal = normalize(vec3(pass_Normal.xyz));
     vec3 surfacePos = vec3(pass_Position.xyz);
@@ -21,7 +22,7 @@ void main(void) {
     float surfaceAlpha = pass_Color.a;
 
     //ambient
-    vec3 ambient = ambientCoefficient * lightColor * surfaceColor;
+    vec3 ambient = lightAmbient * lightColor * surfaceColor;
 
     //diffuse
     vec3 surfaceToLight = normalize(lightPosition - surfacePos);

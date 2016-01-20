@@ -93,7 +93,9 @@ public class Demo extends Game {
         mesh1.addChild(mesh2);
         mesh2.translate(new Vector3f(2, 0, 0));
 
-        Light l = new Light(1, 1, 1);
+        float ambient = 0.01f;
+        float attenuation = 1;
+        Light l = new Light(1, 1, 1, attenuation, ambient);
         scene.addLight(l);
         l.addChild(mesh3);
 
