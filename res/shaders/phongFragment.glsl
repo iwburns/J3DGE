@@ -12,7 +12,7 @@ out vec4 out_Color;
 
 void main(void) {
     float materialShininess = 1000;
-    float ambientCoefficient = 0.1;
+    float ambientCoefficient = 0.01;
     float lightAttenuation = 0.01;
 
     vec3 normal = normalize(vec3(pass_Normal.xyz));
@@ -42,6 +42,9 @@ void main(void) {
     float distanceToLight = length(lightPosition - surfacePos);
     float attenuation = 1.0 / (1.0 + lightAttenuation * pow(distanceToLight, 2));
 
+    vec3 linearColor = ambient + attenuation * (diffuse + specular);
 
-    out_Color = vec4(ambient, surfaceAlpha) + (attenuation * vec4(diffuse + specular, surfaceAlpha));
+    //apply gamma
+    vec3 gamma = vec3(1.0/2.2);
+    out_Color = vec4(pow(linearColor, gamma), surfaceAlpha);
 }
