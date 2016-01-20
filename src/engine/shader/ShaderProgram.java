@@ -96,7 +96,7 @@ public class ShaderProgram {
             nameBytes = new byte[length];
             nameBuff.get(nameBytes, 0, length);
             name = new String(nameBytes, StandardCharsets.UTF_8); //TODO: find out if this should be the default charset
-
+            nameBuff.rewind();
             addAttribute(name);
         }
     }
@@ -124,7 +124,7 @@ public class ShaderProgram {
             nameBytes = new byte[length];
             nameBuff.get(nameBytes, 0, length);
             name = new String(nameBytes, StandardCharsets.UTF_8); //TODO: find out if this should be the default charset
-
+            nameBuff.rewind();
             addUniform(name);
         }
     }
