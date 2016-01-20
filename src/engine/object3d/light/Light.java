@@ -9,6 +9,10 @@ public class Light extends Object3d {
     protected float attenuation;
     protected float ambient;
 
+    public Light(float r, float g, float b) {
+        this(r, g, b, 1, 0);
+    }
+
     public Light(float r, float g, float b, float attenuation, float ambient) {
         super();
         color = new Vector3f(r, g, b);

@@ -1,4 +1,4 @@
-#version 150 core
+#version 450 core
 
 uniform vec3 lightPosition;
 uniform vec3 lightColor;
