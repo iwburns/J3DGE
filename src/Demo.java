@@ -97,7 +97,7 @@ public class Demo extends Game {
         scene.addLight(l);
         l.addChild(mesh3);
 
-        l.moveForward(0);
+        l.moveForward(-3);
         l.moveRight(3);
         l.moveUp(0);
     }
