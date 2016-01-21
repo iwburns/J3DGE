@@ -1,10 +1,13 @@
 package engine.render;
 
+import engine.material.Material;
+import engine.material.PhongMaterial;
 import engine.object3d.Mesh;
 import engine.object3d.Object3d;
 import engine.object3d.camera.Camera;
 import engine.object3d.light.Light;
 import engine.shader.ShaderProgram;
+import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
@@ -73,11 +76,31 @@ public class Renderer {
         if (obj instanceof Mesh) {
             Mesh mesh = (Mesh) obj;
 
+            //TODO: clean up this material junk
+            PhongMaterial phongMaterial = null;
+            Material material =  mesh.getMaterial();
+
+            if (material instanceof PhongMaterial) {
+                phongMaterial = (PhongMaterial) mesh.getMaterial();
+            }
+
             updateCurrentShaderProgram(mesh.getMaterial().getProgram());
 
             //get and send buffer data for current model
             mesh.getModel().get(modelBuffer);
             glUniformMatrix4fv(currentProgram.getUniformLocation("model"), false, modelBuffer);
+
+            if (phongMaterial != null) {
+                Integer materialSpecularCoefficientLocation = currentProgram.getUniformLocation("materialSpecularCoefficient");
+                if (materialSpecularCoefficientLocation != null) {
+                    glUniform1f(materialSpecularCoefficientLocation, phongMaterial.getSpecularCoefficient());
+                }
+                Integer materialSpecularColorLocation = currentProgram.getUniformLocation("materialSpecularColor");
+                if (materialSpecularColorLocation != null) {
+                    Vector3f color = phongMaterial.getSpecularColor();
+                    glUniform3f(materialSpecularColorLocation, color.x, color.y, color.z);
+                }
+            }
 
             bindVao(mesh);
             enableVertexAttributes();

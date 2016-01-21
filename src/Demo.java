@@ -57,7 +57,7 @@ public class Demo extends Game {
         camera.moveUp(1);
 
         Material basicMaterial = new Material();
-        Material phongMaterial = new PhongMaterial();
+        Material phongMaterial = new PhongMaterial(new Vector3f(1, 2, 1), 100f);
         Geometry mesh1Geo = Draw3dUtils.cubeGeometry(1, 1, 1, 1, 0, 0);
         Geometry mesh2Geo = Draw3dUtils.cubeGeometry(0.5f, 2, 0.5f, 0, 0, 1);
         Geometry mesh3Geo = Draw3dUtils.sphereGeometry(0.1f, 10, 10, 0, 1, 0);
