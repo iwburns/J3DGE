@@ -45,6 +45,10 @@ void main(void) {
     float attenuation = 1.0 / (1.0 + lightAttenuation * pow(distanceToLight, 2));
 
     vec3 linearColor = ambient + (attenuation * (diffuse + specular));
+//    vec3 linearColor = ambient;
+//    vec3 linearColor = diffuse;
+//    vec3 linearColor = specular;
+//    vec3 linearColor = ambient + diffuse;
 
     //apply gamma
     vec3 gamma = vec3(1.0/2.2);
