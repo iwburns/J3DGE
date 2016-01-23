@@ -6,8 +6,8 @@ import org.lwjgl.opengl.GL11;
 
 public class Draw3dUtils {
 
-    public static Geometry cubeGeometry(float width, float height, float depth, float r, float g, float b) {
-        IndexedGeometry indexedCube = (IndexedGeometry) Draw3dUtils.indexedCubeGeometry(width, height, depth, r, g, b);
+    public static Geometry cubeGeometry(float width, float height, float depth, Color color) {
+        IndexedGeometry indexedCube = (IndexedGeometry) Draw3dUtils.indexedCubeGeometry(width, height, depth, color);
 
         short[] positionIndices = indexedCube.getIndices();
         float[] vertexPositions = indexedCube.getVertices();
@@ -74,6 +74,11 @@ public class Draw3dUtils {
                 -1, 0, 0, 1
         };
 
+        float r = color.getR();
+        float g = color.getG();
+        float b = color.getB();
+        float a = color.getA();
+
         int vIndex = 0;
         for (int i = 0; i < positionIndices.length; i++) {
             short positionIndex = positionIndices[i];
@@ -85,7 +90,7 @@ public class Draw3dUtils {
             colors[vIndex] = r;
             colors[vIndex + 1] = g;
             colors[vIndex + 2] = b;
-            colors[vIndex + 3] = 1;
+            colors[vIndex + 3] = a;
 
             vIndex += 4;
         }
@@ -93,7 +98,7 @@ public class Draw3dUtils {
         return new Geometry(vertices, normals, colors);
     }
 
-    public static Geometry indexedCubeGeometry(float width, float height, float depth, float r, float g, float b) {
+    public static Geometry indexedCubeGeometry(float width, float height, float depth, Color color) {
         float xMin = -width/2f;
         float xMax = -xMin;
         float yMin = -height/2f;
@@ -114,17 +119,22 @@ public class Draw3dUtils {
                 xMin, yMin, zMin, 1f    //7
         };
 
+        float r = color.getR();
+        float g = color.getG();
+        float b = color.getB();
+        float a = color.getA();
+
         float[] colors = {
                 //front face colors
-                r, g, b, 1f,
-                r, g, b, 1f,
-                r, g, b, 1f,
-                r, g, b, 1f,
+                r, g, b, a,
+                r, g, b, a,
+                r, g, b, a,
+                r, g, b, a,
                 //back face colors
-                r, g, b, 1f,
-                r, g, b, 1f,
-                r, g, b, 1f,
-                r, g, b, 1f
+                r, g, b, a,
+                r, g, b, a,
+                r, g, b, a,
+                r, g, b, a
         };
 
         /*
@@ -164,11 +174,9 @@ public class Draw3dUtils {
         return new IndexedGeometry(vertices, null, colors, indices);
     }
 
-    public static Geometry sphereGeometry(float radius, int heightSegments, int widthSegments,  float r, float g, float b) {
+    public static Geometry sphereGeometry(float radius, int heightSegments, int widthSegments, Color color) {
 
         //TODO: create non-indexed version of this.
-
-        float a = 1f;   //alpha
 
         if (radius < 0) {
             radius = Math.abs(radius);
@@ -198,6 +206,11 @@ public class Draw3dUtils {
         //TODO: handle the case where a short wont fit all of the indices we need.
 
         int i = 0;  // vertices/colors index
+
+        float r = color.getR();
+        float g = color.getG();
+        float b = color.getB();
+        float a = color.getA();
 
         for (float phi = phiMin; phi <= phiMax; phi += deltaPhi) {             // this is our rotation about x
             for (float theta = thetaMin; theta < thetaMax; theta += deltaTheta) {   // this is our rotation about z

@@ -57,15 +57,19 @@ public class Demo extends Game {
         camera.moveForward(-10);
         camera.moveUp(1);
 
+        Color red = new Color(1, 0, 0);
+        Color green = new Color(0, 1, 0);
+        Color blue = new Color(0, 0, 1);
+
         Material basicMaterial = new Material();
         Material phongMaterial = new PhongMaterial(new Color(1, 1, 1), 100f);
-        Geometry mesh1Geo = Draw3dUtils.cubeGeometry(1, 1, 1, 1, 0, 0);
-        Geometry mesh2Geo = Draw3dUtils.cubeGeometry(0.5f, 2, 0.5f, 0, 0, 1);
-        Geometry mesh3Geo = Draw3dUtils.sphereGeometry(0.1f, 10, 10, 0, 1, 0);
+        Geometry mesh1Geo = Draw3dUtils.cubeGeometry(1, 1, 1, red);
+        Geometry mesh2Geo = Draw3dUtils.cubeGeometry(0.5f, 2, 0.5f, blue);
+        Geometry mesh3Geo = Draw3dUtils.sphereGeometry(0.1f, 10, 10, green);
         Geometry gridGeo = Draw3dUtils.gridHelper(10, 1);
         Geometry axisGeo = Draw3dUtils.axisHelper(1);
 
-        Geometry wallGeo = Draw3dUtils.cubeGeometry(10, 10, 0.5f, 26/255f, 188/255f, 156/255f);
+        Geometry wallGeo = Draw3dUtils.cubeGeometry(10, 10, 0.5f, new Color(26/255f, 188/255f, 156/255f));
 
         Mesh gridMesh = new Mesh(gridGeo, basicMaterial);
         Mesh axisMesh = new Mesh(axisGeo, basicMaterial);
