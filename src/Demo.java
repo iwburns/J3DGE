@@ -56,18 +56,13 @@ public class Demo extends Game {
         camera.moveForward(-10);
         camera.moveUp(1);
 
-        Color red = new Color(1, 0, 0);
-        Color green = new Color(0, 1, 0);
-        Color blue = new Color(0, 0, 1);
-        Color white = new Color(1, 1, 1);
-
         Material basicMaterial = new Material();
-        Material phongMaterial = new PhongMaterial(new Color(1, 1, 1), 100f);
-        Geometry mesh1Geo = Draw3dUtils.cubeGeometry(1, 1, 1, red);
-        Geometry mesh2Geo = Draw3dUtils.cubeGeometry(0.5f, 2, 0.5f, blue);
-        Geometry lightBallGeo1 = Draw3dUtils.sphereGeometry(0.1f, 10, 10, red);
-        Geometry lightBallGeo2 = Draw3dUtils.sphereGeometry(0.1f, 10, 10, green);
-        Geometry lightBallGeo3 = Draw3dUtils.sphereGeometry(0.1f, 10, 10, blue);
+        Material phongMaterial = new PhongMaterial(Color.WHITE, 100f);
+        Geometry mesh1Geo = Draw3dUtils.cubeGeometry(1, 1, 1, Color.RED);
+        Geometry mesh2Geo = Draw3dUtils.cubeGeometry(0.5f, 2, 0.5f, Color.BLUE);
+        Geometry lightBallGeo1 = Draw3dUtils.sphereGeometry(0.1f, 10, 10, Color.RED);
+        Geometry lightBallGeo2 = Draw3dUtils.sphereGeometry(0.1f, 10, 10, Color.GREEN);
+        Geometry lightBallGeo3 = Draw3dUtils.sphereGeometry(0.1f, 10, 10, Color.BLUE);
         Geometry gridGeo = Draw3dUtils.gridHelper(10, 1);
         Geometry axisGeo = Draw3dUtils.axisHelper(1);
 
@@ -105,21 +100,21 @@ public class Demo extends Game {
         float ambient = 0.001f;
         float attenuation = 0.1f;
 
-        Light light1 = new Light(red, attenuation, ambient);
+        Light light1 = new Light(Color.RED, attenuation, ambient);
         scene.addLight(light1);
         light1.addChild(lightBall1);
         light1.moveForward(-3);
         light1.moveRight(3);
         light1.moveUp(0);
 
-        Light light2 = new Light(green, attenuation, ambient);
+        Light light2 = new Light(Color.GREEN, attenuation, ambient);
         scene.addLight(light2);
         light2.addChild(lightBall2);
         light2.moveForward(3);
         light2.moveRight(3);
         light2.moveUp(0);
 
-        Light light3 = new Light(blue, attenuation, ambient);
+        Light light3 = new Light(Color.BLUE, attenuation, ambient);
         scene.addLight(light3);
         light3.addChild(lightBall3);
         light3.moveForward(3);
