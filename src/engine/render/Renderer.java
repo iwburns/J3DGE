@@ -12,6 +12,7 @@ import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 
 import java.nio.FloatBuffer;
+import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.GL_ELEMENT_ARRAY_BUFFER;
@@ -25,11 +26,6 @@ public class Renderer {
     private FloatBuffer viewBuffer;
     private FloatBuffer modelBuffer;
 
-    private FloatBuffer lightPosition;
-    private FloatBuffer lightColor;
-    private float lightAttenuation;
-    private float lightAmbient;
-
     private FloatBuffer cameraPosition;
 
     private ShaderProgram currentProgram;
@@ -38,9 +34,6 @@ public class Renderer {
         projectionBuffer = BufferUtils.createFloatBuffer(16);
         viewBuffer = BufferUtils.createFloatBuffer(16);
         modelBuffer = BufferUtils.createFloatBuffer(16);
-
-        lightPosition = BufferUtils.createFloatBuffer(3);
-        lightColor = BufferUtils.createFloatBuffer(3);
 
         cameraPosition = BufferUtils.createFloatBuffer(3);
         currentProgram = null;
@@ -54,26 +47,21 @@ public class Renderer {
         camera.getPosition().get(cameraPosition);
 
         if (!scene.getLights().isEmpty()) {
-            Light light = scene.getLights().get(0);
-            light.getPosition().get(lightPosition);
-            light.getColor().getRGBBuffer(lightColor);
-            lightAttenuation = light.getAttenuation();
-            lightAmbient = light.getAmbient();
 
             for (Object3d obj: scene.getLights()) {
-                drawObject(obj);
+                drawObject(obj, scene);
             }
 
         }
 
         for (Object3d obj: scene.getObjects()) {
-            drawObject(obj);
+            drawObject(obj, scene);
         }
 
         clearShaderProgram();
     }
 
-    private void drawObject(Object3d obj) {
+    private void drawObject(Object3d obj, Scene scene) {
         if (obj instanceof Mesh) {
             Mesh mesh = (Mesh) obj;
 
@@ -85,7 +73,7 @@ public class Renderer {
                 phongMaterial = (PhongMaterial) mesh.getMaterial();
             }
 
-            updateCurrentShaderProgram(mesh.getMaterial().getProgram());
+            updateCurrentShaderProgram(mesh.getMaterial().getProgram(), scene);
 
             //get and send buffer data for current model
             mesh.getModel().get(modelBuffer);
@@ -120,7 +108,7 @@ public class Renderer {
         }
 
         for (Object3d child: obj.getChildren()) {
-            drawObject(child);
+            drawObject(child, scene);
         }
     }
 
@@ -140,7 +128,7 @@ public class Renderer {
         currentProgram.getAttributeLocations().forEach(location -> glDisableVertexAttribArray(location));
     }
 
-    private void updateCurrentShaderProgram(ShaderProgram program) {
+    private void updateCurrentShaderProgram(ShaderProgram program, Scene scene) {
         if (currentProgram == null || currentProgram != program) {
             currentProgram = program;
             glUseProgram(currentProgram.getProgramId());
@@ -149,21 +137,48 @@ public class Renderer {
             glUniformMatrix4fv(currentProgram.getUniformLocation("projection"), false, projectionBuffer);
             glUniformMatrix4fv(currentProgram.getUniformLocation("view"), false, viewBuffer);
 
-            Integer lightPositionLocation = currentProgram.getUniformLocation("lightPosition");
-            if (lightPositionLocation != null) {
-                glUniform3fv(lightPositionLocation, lightPosition);
-            }
-            Integer lightColorLocation = currentProgram.getUniformLocation("lightColor");
-            if (lightColorLocation != null) {
-                glUniform3fv(lightColorLocation, lightColor);
-            }
-            Integer lightAttenuationLocation = currentProgram.getUniformLocation("lightAttenuation");
-            if (lightAttenuationLocation != null) {
-                glUniform1f(lightAttenuationLocation, lightAttenuation);
-            }
-            Integer lightAmbientLocation = currentProgram.getUniformLocation("lightAmbient");
-            if (lightAmbientLocation != null) {
-                glUniform1f(lightAmbientLocation, lightAmbient);
+            ArrayList<Light> lights = scene.getLights();
+            Light currentLight;
+            Vector3f lightPosition;
+            Color lightColor;
+            float lightAttenuation;
+            float lightAmbient;
+
+            //todo: don't hardcode this
+            //also later, don't copy position, color, attenuation and ambient from the same value into all locations
+            for (int i = 0; i < 10; i++) {
+                if (i > lights.size() - 1) {
+                    Integer lightIsActiveLocation = currentProgram.getUniformLocation("lights[" + i + "].isActive");
+                    if (lightIsActiveLocation != null) {
+                        glUniform1i(lightIsActiveLocation, 0);
+                    }
+                } else {
+                    currentLight = scene.getLights().get(i);
+                    Integer lightIsActiveLocation = currentProgram.getUniformLocation("lights[" + i + "].isActive");
+                    if (lightIsActiveLocation != null) {
+                        glUniform1i(lightIsActiveLocation, 1);
+                    }
+                    Integer lightPosLocation = currentProgram.getUniformLocation("lights[" + i + "].position");
+                    if (lightPosLocation != null) {
+                        lightPosition = currentLight.getPosition();
+                        glUniform3f(lightPosLocation, lightPosition.x, lightPosition.y, lightPosition.z);
+                    }
+                    Integer lightColorLocation = currentProgram.getUniformLocation("lights[" + i + "].color");
+                    if (lightColorLocation != null) {
+                        lightColor = currentLight.getColor();
+                        glUniform3f(lightColorLocation, lightColor.getR(), lightColor.getG(), lightColor.getB());
+                    }
+                    Integer lightAttenuationLocation = currentProgram.getUniformLocation("lights[" + i + "].attenuation");
+                    if (lightAttenuationLocation != null) {
+                        lightAttenuation = currentLight.getAttenuation();
+                        glUniform1f(lightAttenuationLocation, lightAttenuation);
+                    }
+                    Integer lightAmbientLocation = currentProgram.getUniformLocation("lights[" + i + "].ambient");
+                    if (lightAmbientLocation != null) {
+                        lightAmbient = currentLight.getAmbient();
+                        glUniform1f(lightAmbientLocation, lightAmbient);
+                    }
+                }
             }
 
             Integer cameraPositionLocation = currentProgram.getUniformLocation("cameraPosition");
