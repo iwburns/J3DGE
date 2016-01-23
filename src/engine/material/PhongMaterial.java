@@ -1,6 +1,7 @@
 package engine.material;
 
 import engine.shader.ShaderProgram;
+import engine.util.Color;
 import org.joml.Vector3f;
 
 import static org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER;
@@ -8,10 +9,10 @@ import static org.lwjgl.opengl.GL20.GL_VERTEX_SHADER;
 
 public class PhongMaterial extends Material {
 
-    protected Vector3f specularColor;
+    protected Color specularColor;
     protected float specularCoefficient;
 
-    public PhongMaterial(Vector3f specularColor, float specularCoefficient) {
+    public PhongMaterial(Color specularColor, float specularCoefficient) {
         program = new ShaderProgram();
 
         program.attachShader("res/shaders/phongVertex.glsl", GL_VERTEX_SHADER);
@@ -25,14 +26,14 @@ public class PhongMaterial extends Material {
     }
 
     public PhongMaterial() {
-        this(new Vector3f(1, 1, 1), 0.5f);
+        this(new Color(1, 1, 1), 0.5f);
     }
 
-    public Vector3f getSpecularColor() {
+    public Color getSpecularColor() {
         return specularColor;
     }
 
-    public void setSpecularColor(Vector3f specularColor) {
+    public void setSpecularColor(Color specularColor) {
         this.specularColor = specularColor;
     }
 

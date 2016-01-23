@@ -7,6 +7,7 @@ import engine.object3d.Object3d;
 import engine.object3d.camera.Camera;
 import engine.object3d.light.Light;
 import engine.shader.ShaderProgram;
+import engine.util.Color;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 
@@ -55,7 +56,7 @@ public class Renderer {
         if (!scene.getLights().isEmpty()) {
             Light light = scene.getLights().get(0);
             light.getPosition().get(lightPosition);
-            light.getColor().get(lightColor);
+            light.getColor().getRGBBuffer(lightColor);
             lightAttenuation = light.getAttenuation();
             lightAmbient = light.getAmbient();
 
@@ -97,8 +98,8 @@ public class Renderer {
                 }
                 Integer materialSpecularColorLocation = currentProgram.getUniformLocation("materialSpecularColor");
                 if (materialSpecularColorLocation != null) {
-                    Vector3f color = phongMaterial.getSpecularColor();
-                    glUniform3f(materialSpecularColorLocation, color.x, color.y, color.z);
+                    Color color = phongMaterial.getSpecularColor();
+                    glUniform3f(materialSpecularColorLocation, color.getR(), color.getG(), color.getB());
                 }
             }
 

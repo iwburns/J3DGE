@@ -1,5 +1,10 @@
 package engine.util;
 
+import org.joml.Vector3f;
+import org.joml.Vector4f;
+
+import java.nio.FloatBuffer;
+
 public class Color {
 
     private float r;
@@ -47,6 +52,15 @@ public class Color {
 
     public Color clone() {
         return new Color(this);
+    }
+
+    //TODO: go figure out how JOML's .get functions work so this doesn't depend on them
+    public void getRGBBuffer(FloatBuffer buffer) {
+        new Vector3f(r, g, b).get(buffer);
+    }
+
+    public void getRGBABuffer(FloatBuffer buffer) {
+        new Vector4f(r, g, b, a).get(buffer);
     }
 
     public float getR() {

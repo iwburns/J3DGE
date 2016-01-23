@@ -1,33 +1,34 @@
 package engine.object3d.light;
 
 import engine.object3d.Object3d;
+import engine.util.Color;
 import org.joml.Vector3f;
 
 public class Light extends Object3d {
 
-    protected Vector3f color;
+    protected Color color;
     protected float attenuation;
     protected float ambient;
 
-    public Light(float r, float g, float b) {
-        this(r, g, b, 1, 0);
+    public Light(Color color) {
+        this(color, 1, 0);
     }
 
-    public Light(float r, float g, float b, float attenuation, float ambient) {
+    public Light(Color color, float attenuation, float ambient) {
         super();
-        color = new Vector3f(r, g, b);
+        this.color = color;
         this.attenuation = attenuation;
         this.ambient = ambient;
     }
 
-    public Vector3f getColor() {
+    public Color getColor() {
         return color;
     }
 
     public void setColor(float r, float g, float b) {
-        color.x = r;
-        color.y = g;
-        color.z = b;
+        color.setR(r);
+        color.setG(g);
+        color.setB(b);
     }
 
     public float getAttenuation() {
