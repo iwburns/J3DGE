@@ -53,10 +53,12 @@ vec3 calculateColor(Light light, vec3 normal, vec3 surfacePos, vec3 surfaceColor
         float attenuation = 1.0 / (1.0 + lightAttenuation * pow(distanceToLight, 2));
 
         return ambient + (attenuation * (diffuse + specular));
-        //    return ambient;
-        //    return diffuse;
-        //    return specular;
-        //    return ambient + diffuse;
+//        return attenuation * (ambient + diffuse + specular);
+//        return ambient;
+//        return diffuse;
+//        return specular;
+//        return ambient + diffuse;
+//        return diffuse + specular;
     }
     return vec3(0);
 }
