@@ -5,20 +5,19 @@ import engine.object3d.light.Light;
 
 import java.util.ArrayList;
 
-public class Scene {
+public class Scene extends Object3d {
 
     //TODO: write a destroy
 
-    private ArrayList<Object3d> objects;
-    private ArrayList<Light> lights;
+    protected ArrayList<Light> lights;
 
     public Scene() {
-        objects = new ArrayList<>();
+        super();
         lights = new ArrayList<>();
     }
 
     public void add(Object3d obj) {
-        objects.add(obj);
+        addChild(obj);
     }
 
     public void addLight(Light light) {
@@ -26,7 +25,7 @@ public class Scene {
     }
 
     public boolean remove(Object3d obj) {
-        return objects.remove(obj);
+        return children.remove(obj);
     }
 
     public boolean remove(Light light) {
@@ -34,7 +33,7 @@ public class Scene {
     }
 
     public ArrayList<Object3d> getObjects() {
-        return objects;
+        return children;
     }
 
     public ArrayList<Light> getLights() {

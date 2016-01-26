@@ -160,7 +160,7 @@ public class Renderer {
                     }
                     Integer lightPosLocation = currentProgram.getUniformLocation("lights[" + i + "].position");
                     if (lightPosLocation != null) {
-                        lightPosition = currentLight.getPosition();
+                        lightPosition = currentLight.getWorldPosition();
                         glUniform3f(lightPosLocation, lightPosition.x, lightPosition.y, lightPosition.z);
                     }
                     Integer lightColorLocation = currentProgram.getUniformLocation("lights[" + i + "].color");

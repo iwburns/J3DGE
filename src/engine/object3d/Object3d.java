@@ -1,5 +1,7 @@
 package engine.object3d;
 
+import engine.object3d.light.Light;
+import engine.render.Scene;
 import org.joml.*;
 
 import java.util.ArrayList;
@@ -44,6 +46,16 @@ public class Object3d {
     public void addChild(Object3d obj) {
         if (this == obj) {
             throw new IllegalArgumentException("Cannot add object as a child to itself.");
+        }
+        if (obj instanceof Light) {
+            Object3d currentObj = this;
+            while (currentObj.getParent() != null) {
+                currentObj = currentObj.getParent();
+            }
+            if (currentObj instanceof Scene) {
+                // it should be
+                ((Scene) currentObj).addLight((Light) obj);
+            }
         }
         children.add(obj);
         obj.parent = this;
@@ -152,6 +164,14 @@ public class Object3d {
 
     public Vector3f getPosition() {
         return position;
+    }
+
+    public Vector3f getWorldPosition() {
+        getLocalToWorld();
+
+        Vector3f pos = new Vector3f();
+        localToWorld.getTranslation(pos);
+        return pos;
     }
 
     public Quaternionf getRotation() {

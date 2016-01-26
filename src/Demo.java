@@ -62,10 +62,7 @@ public class Demo extends Game {
         Material phongMaterial = new PhongMaterial(Color.WHITE, 80);
         Geometry mesh1Geo = Draw3dUtils.cubeGeometry(1, 1, 1, Color.RED);
         Geometry mesh2Geo = Draw3dUtils.cubeGeometry(0.5f, 2, 0.5f, Color.BLUE);
-        Geometry lightBallGeo1 = Draw3dUtils.sphereGeometry(0.1f, 10, 10, Color.RED);
-        Geometry lightBallGeo2 = Draw3dUtils.sphereGeometry(0.1f, 10, 10, Color.GREEN);
-        Geometry lightBallGeo3 = Draw3dUtils.sphereGeometry(0.1f, 10, 10, Color.BLUE);
-        Geometry lightBallGeo4 = Draw3dUtils.sphereGeometry(0.1f, 10, 10, Color.WHITE);
+        Geometry lightBallGeo = Draw3dUtils.sphereGeometry(0.1f, 10, 10, Color.WHITE);
         Geometry gridGeo = Draw3dUtils.gridHelper(10, 1);
         Geometry axisGeo = Draw3dUtils.axisHelper(1);
 
@@ -78,10 +75,7 @@ public class Demo extends Game {
 
         mesh1 = new Mesh(mesh1Geo, phongMaterial);
         mesh2 = new Mesh(mesh2Geo, phongMaterial);
-        Mesh lightBall1 = new Mesh(lightBallGeo1, basicMaterial);
-        Mesh lightBall2 = new Mesh(lightBallGeo2, basicMaterial);
-        Mesh lightBall3 = new Mesh(lightBallGeo3, basicMaterial);
-        Mesh lightBall4 = new Mesh(lightBallGeo4, basicMaterial);
+        Mesh lightBall = new Mesh(lightBallGeo, basicMaterial);
 
         Mesh wallMesh = new Mesh(wallGeo, phongMaterial);
         Mesh wallMesh2 = new Mesh(wallGeo, phongMaterial);
@@ -104,55 +98,12 @@ public class Demo extends Game {
         float ambient = 0.001f;
         float attenuation = 0.1f;
 
-//        Light light1 = new Light(Color.RED, attenuation, ambient);
-//        scene.addLight(light1);
-//        light1.addChild(lightBall1);
-//
-//        Light light2 = new Light(Color.GREEN, attenuation, ambient);
-//        scene.addLight(light2);
-//        light2.addChild(lightBall2);
-//
-//        Light light3 = new Light(Color.BLUE, attenuation, ambient);
-//        scene.addLight(light3);
-//        light3.addChild(lightBall3);
+        Light light = new Light(Color.WHITE, attenuation, ambient);
+        light.addChild(lightBall);
+        mesh2.addChild(light);
 
-        //only use this for single light setup
-        Light light4 = new Light(Color.WHITE, attenuation, ambient);
-        scene.addLight(light4);
-        light4.addChild(lightBall4);
+        light.moveForward(-1);
 
-        //single light setup
-        light4.moveForward(-3);
-        light4.moveRight(3);
-        light4.moveUp(2);
-
-
-        //multi light setup
-//        light1.moveForward(-3);
-//        light1.moveRight(3);
-//        light1.moveUp(0);
-//
-//        light2.moveForward(3);
-//        light2.moveRight(3);
-//        light2.moveUp(0);
-//
-//        light3.moveForward(3);
-//        light3.moveRight(-3);
-//        light3.moveUp(0);
-
-
-        //light mixing setup
-//        light1.moveForward(-1);
-//        light1.moveRight(3);
-//        light1.moveUp(0);
-//
-//        light2.moveForward(1);
-//        light2.moveRight(3);
-//        light2.moveUp(0);
-//
-//        light3.moveForward(0);
-//        light3.moveRight(3);
-//        light3.moveUp(2);
     }
 
     @Override
