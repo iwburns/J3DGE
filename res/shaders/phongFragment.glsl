@@ -13,7 +13,7 @@ struct Light {
 uniform Light lights[MAX_LIGHTS];
 
 uniform float materialSpecularCoefficient;
-uniform vec3 materialSpecularColor;
+uniform vec3 materialSpecularColor;         //TODO: use the opengl red-book and change this to sharpness and strength to see how good that looks
 
 uniform vec3 cameraPosition;
 
