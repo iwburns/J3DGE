@@ -1,7 +1,6 @@
 package engine.object3d;
 
 import engine.object3d.light.Light;
-import engine.render.Scene;
 import org.joml.*;
 
 import java.util.ArrayList;

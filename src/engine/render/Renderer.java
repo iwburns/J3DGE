@@ -4,6 +4,7 @@ import engine.material.Material;
 import engine.material.PhongMaterial;
 import engine.object3d.Mesh;
 import engine.object3d.Object3d;
+import engine.object3d.Scene;
 import engine.object3d.camera.Camera;
 import engine.object3d.light.Light;
 import engine.shader.ShaderProgram;

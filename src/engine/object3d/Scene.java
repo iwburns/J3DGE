@@ -1,4 +1,4 @@
-package engine.render;
+package engine.object3d;
 
 import engine.object3d.Object3d;
 import engine.object3d.light.Light;

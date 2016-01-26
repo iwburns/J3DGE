@@ -9,12 +9,10 @@ import engine.object3d.Object3d;
 import engine.object3d.camera.Camera;
 import engine.object3d.camera.PerspectiveCamera;
 import engine.object3d.light.Light;
-import engine.render.Scene;
+import engine.object3d.Scene;
 import engine.util.Color;
 import engine.util.Draw3dUtils;
 import org.joml.Vector3f;
-
-import java.util.Arrays;
 
 import static org.lwjgl.glfw.GLFW.*;
 
