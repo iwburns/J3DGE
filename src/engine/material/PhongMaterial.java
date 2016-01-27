@@ -2,7 +2,6 @@ package engine.material;
 
 import engine.shader.ShaderProgram;
 import engine.util.Color;
-import org.joml.Vector3f;
 
 import static org.lwjgl.opengl.GL20.GL_FRAGMENT_SHADER;
 import static org.lwjgl.opengl.GL20.GL_VERTEX_SHADER;

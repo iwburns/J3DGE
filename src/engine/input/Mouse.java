@@ -5,7 +5,8 @@ import org.lwjgl.glfw.GLFWMouseButtonCallback;
 
 import java.util.HashMap;
 
-import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
+import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 
 public class Mouse {
 

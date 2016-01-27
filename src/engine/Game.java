@@ -2,8 +2,8 @@ package engine;
 
 import engine.input.Keyboard;
 import engine.input.Mouse;
-import engine.object3d.camera.Camera;
 import engine.object3d.Scene;
+import engine.object3d.camera.Camera;
 
 public abstract class Game {
 

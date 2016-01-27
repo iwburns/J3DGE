@@ -1,7 +1,9 @@
 package engine.object3d;
 
 import engine.object3d.light.Light;
-import org.joml.*;
+import org.joml.Matrix4f;
+import org.joml.Quaternionf;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 

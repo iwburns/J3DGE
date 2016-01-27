@@ -4,7 +4,8 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 
 import java.util.HashMap;
 
-import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFW.GLFW_PRESS;
+import static org.lwjgl.glfw.GLFW.GLFW_RELEASE;
 
 public class Keyboard {
 

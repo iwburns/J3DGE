@@ -3,7 +3,6 @@ package engine.opengl.vbo;
 import java.nio.Buffer;
 import java.util.ArrayList;
 
-import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 
 public abstract class VertexBufferObject extends BufferObject {

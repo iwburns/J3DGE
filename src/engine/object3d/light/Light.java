@@ -2,9 +2,6 @@ package engine.object3d.light;
 
 import engine.object3d.Object3d;
 import engine.util.Color;
-import org.joml.Matrix4f;
-import org.joml.Vector3f;
-import org.joml.Vector4f;
 
 public class Light extends Object3d {
 
